@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import CustomerDetails from '../components/CustomerDetails';
-import ProductDetails from '../components/ProductDetails';
-import OrderSummary from '../components/OrderSummary';
+import React, { useState } from "react";
+import CustomerDetails from "../../components/CustomerDetails/CustomerDetails";
+import ProductDetails from "../../components/ProductDetails";
+import OrderSummary from "../../components/OrderSummary";
+import NavBar from "../../components/NavBar/NavBar";
 
 const OrderForm = () => {
   const [customer, setCustomer] = useState(null); // Holds customer details
@@ -16,9 +17,10 @@ const OrderForm = () => {
   const handleProductListUpdate = (updatedProductList) => {
     setProductList(updatedProductList);
   };
-  
+
   return (
     <div>
+      <NavBar />
       <CustomerDetails onCustomerUpdate={handleCustomerUpdate} />
       <ProductDetails onProductListUpdate={handleProductListUpdate} />
       <OrderSummary customer={customer} productList={productList} />

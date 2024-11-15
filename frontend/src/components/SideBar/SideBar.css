@@ -1,0 +1,152 @@
+.container-1 {
+    width: 120px;
+    min-height: 100vh;
+    background-color: white;
+    border-right: 1px solid #e5e7eb;
+    padding: 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.logo-image {
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.logo-image img {
+    max-width: 100%;
+    height: auto;
+    
+}
+
+.image-1 {
+    flex: 1;
+}
+
+.image-1 ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.image-1 li {
+    margin-bottom: 0.25rem;
+}
+
+.image-1 a {
+    display: flex;
+    flex-direction: column;  /* Changed to column layout */
+    align-items: center;     /* Center items horizontally */
+    text-align: center;      /* Center text */
+    padding: 0.75rem 0.5rem; /* Adjusted padding */
+    text-decoration: none;
+    color: #4b5563;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.image-1 a:hover {
+    background-color: #f3f4f6;
+    color: #926B6B;
+}
+
+.image-1 a span:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;  /* Space between icon and label */
+    color: #6b7280;
+}
+
+.image-1 a:hover span:first-child {
+    color: #926B6B;
+}
+
+.image-1 a span:last-child {
+    font-size: 0.75rem;     /* Slightly smaller font for labels */
+    font-weight: 500;
+    max-width: 100%;        /* Ensure text wraps if needed */
+    white-space: normal;    /* Allow text to wrap */
+    line-height: 1.2;       /* Proper line height for wrapped text */
+}
+
+/* User profile section at the bottom */
+.container-1 > div:last-child {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.container-1 > div:last-child > div {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+}
+
+.container-1 > div:last-child > div > div:first-child {
+    width: 2rem;
+    height: 2rem;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+}
+
+.container-1 > div:last-child > div > div:last-child {
+    flex: 1;
+}
+
+.container-1 > div:last-child p:first-child {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin: 0;
+}
+
+.container-1 > div:last-child p:last-child {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+/* Active link styles */
+.image-1 a.active {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.image-1 a.active span:first-child {
+    color: #374151;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container-1 {
+        width: 80px;
+        padding: 1rem 0.5rem;
+    }
+
+    .image-1 a {
+        padding: 0.75rem 0.25rem;
+    }
+
+    .image-1 a span:first-child {
+        margin-bottom: 0.25rem;
+    }
+
+    .image-1 a span:last-child {
+        font-size: 0.65rem; /* Even smaller font on mobile */
+    }
+
+    .container-1 > div:last-child > div > div:last-child {
+        display: none;
+    }
+}

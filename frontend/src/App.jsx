@@ -1,4 +1,4 @@
-import OrderForm from "./pages/OrderForm";
+import OrderForm from "./pages/OrderForm/OrderForm";
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import SignInPage from "./pages/Signin/SignInPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/SideBar/SideBar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Create a wrapper component to handle NavBar rendering
