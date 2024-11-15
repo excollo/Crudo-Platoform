@@ -1,4 +1,5 @@
 import React from "react"; // Import React// Import CSS for styling
+import "./OrderSummary.css";
 
 // OrderSummary component accepts customer and productList as props
 const OrderSummary = ({ customer, productList }) => {
@@ -14,12 +15,11 @@ const OrderSummary = ({ customer, productList }) => {
 
       {/* Display customer details */}
       <div className="customer-details">
-        <h4>Customer Details</h4>
         <p>
-          <strong>Name:</strong> {customer ? customer.Party : "N/A"}
+          <strong>Customer Name:</strong> {customer ? customer.Party : "N/A"}
         </p>
         <p>
-          <strong>Phone:</strong>{" "}
+          <strong>Contact Number:</strong>{" "}
           {customer ? customer.Mobile || customer.Phone : "N/A"}
         </p>
         <p>
@@ -29,25 +29,13 @@ const OrderSummary = ({ customer, productList }) => {
           <strong>Address:</strong> {customer ? customer.Address : "N/A"}
         </p>
       </div>
-
-      {/* Display list of products */}
-      <div className="product-list">
-        <h4>Product List</h4>
-        <ul>
-          {productList.map((item, index) => (
-            <li key={index}>
-              <span>
-                {item.label} - {item.quantity} pcs - ₹{item.MRP} each
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Display total MRP */}
       <div className="total-mrp">
         <h4>Total MRP: ₹{totalMRP}</h4>
       </div>
+      <p>
+        <strong>Additional Note</strong> 
+        <textarea className="texting" name="" id=""></textarea>
+      </p>
     </div>
   );
 };

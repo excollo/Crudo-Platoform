@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import CustomerDetails from "../../components/CustomerDetails/CustomerDetails";
 import ProductDetails from "../../components/ProductDetails";
-import OrderSummary from "../../components/OrderSummary";
+import OrderSummary from "../../components/OrderSummary/OrderSummary";
 import NavBar from "../../components/NavBar/NavBar";
+import './OrderForm.css';
 
 const OrderForm = () => {
   const [customer, setCustomer] = useState(null); // Holds customer details
@@ -21,9 +22,11 @@ const OrderForm = () => {
   return (
     <div>
       <NavBar />
-      <CustomerDetails onCustomerUpdate={handleCustomerUpdate} />
+      <div className="displaying">
+        <CustomerDetails onCustomerUpdate={handleCustomerUpdate} />
+        <OrderSummary customer={customer} productList={productList} />
+      </div>
       <ProductDetails onProductListUpdate={handleProductListUpdate} />
-      <OrderSummary customer={customer} productList={productList} />
     </div>
   );
 };

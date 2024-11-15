@@ -1,0 +1,16 @@
+.displaying {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  flex: 1;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 2000px;
+  max-height: 2000px;
+  margin: 10px auto;
+  margin-left: 120px;
+}
+

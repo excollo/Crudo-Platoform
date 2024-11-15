@@ -1,0 +1,109 @@
+
+.form-handling{
+    margin-left: 70px;
+    background-color: #fff;
+    border-radius: 10px;
+    max-width: 800px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px 50px; 
+    padding-right: 180px;
+    
+}
+
+.customer-details-card h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.inputs-width{
+    margin-bottom: 15px;
+}
+
+.inputs-width label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.inputs-width input {
+  width: 165%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.inputs-width select {
+  width: 325%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.inline-1{
+    display: flex;
+    gap: 11rem;
+    margin-bottom: 1rem;
+}
+
+.inline-2{
+    display: flex;
+    gap: 11rem;
+}
+
+.select-input{
+    width: 122%
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 122%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.submit-button {
+  background-color: #ff6f61;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #e65c50;
+}
+
+.star{
+    color: red;
+}

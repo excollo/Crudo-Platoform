@@ -1,115 +1,137 @@
-import React, { useState, useEffect } from "react"; // Import React and hooks for state and lifecycle management
-import axios from "axios"; // Import axios for making HTTP requests
-import Select from "react-select"; // Import react-select for searchable dropdown component // Import CSS for styling
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Select from "react-select";
+import "./CustomerDetails.css";
 
-// Component for managing and displaying customer details
 function CustomerDetails({ onCustomerUpdate }) {
-  // State variables to manage customers list, selected customer, and customer details
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
 
-  // Fetch customer data from API when component mounts
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/customers")
-      .then((response) => setCustomers(response.data)) // Update customers state with fetched data
-      .catch((error) => console.error("Error fetching customers", error)); // Log errors if fetching fails
+      .then((response) => setCustomers(response.data))
+      .catch((error) => console.error("Error fetching customers", error));
   }, []);
 
-  // Handle selection change in the dropdown
   const handleCustomerChange = (selectedOption) => {
-    const customerId = selectedOption ? selectedOption.value : null; // Get selected customer ID
-    const customer = customers.find((cust) => cust.PKID === customerId); // Find selected customer in the list
+    const customerId = selectedOption ? selectedOption.value : null;
+    const customer = customers.find((cust) => cust.PKID === customerId);
 
-    // Update state with selected customer's details
     setSelectedCustomer(customer);
     setEmail(customer ? customer.Email : "");
     setPhoneNumber(customer ? customer.Mobile || customer.Phone : "");
     setAddress(customer ? customer.Address : "");
+
+    // Update the parent component with the selected customer details
+    onCustomerUpdate(customer);
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Updated Customer Details:", { email, phoneNumber, address }); // Log updated details
-    console.log("Selected Customer:", selectedCustomer); // Log selected customer
-    onCustomerUpdate(selectedCustomer); // Call parent function to update customer
-  };
-
-  // Format customers list for the dropdown
   const customerOptions = customers.map((customer) => ({
-    value: customer.PKID, // Use customer PKID as option value
-    label: customer.Party || "No Name", // Use Party name or default label if name is missing
+    value: customer.PKID,
+    label: customer.UserName || "No Name",
   }));
 
   return (
-    <div className="customer-details">
-      <form onSubmit={handleSubmit}>
-        <h2>Order Form</h2>
+    <div className="customer-details-card">
+      <form className="form-handling">
+        <h2>Customer Details</h2>
 
-        {/* Dropdown for selecting a customer */}
-        <div className="customer-name-container">
-          <label>Customer Name:</label>
+        <div className="form-group">
+          <label>
+            Customer Name<span className="star">*</span>
+          </label>
           <Select
+            className="select-input"
             options={customerOptions}
             onChange={handleCustomerChange}
-            getOptionLabel={(e) => e.label} // Customize label display
-            getOptionValue={(e) => e.value} // Customize value retrieval
             placeholder="Search and select a customer"
             isClearable
           />
         </div>
 
-        {/* Input fields for customer details */}
-        <div>
-          <label htmlFor="contactNumber">Contact Number:</label>
-          <input
-            type="tel"
-            id="contactNumber"
-            value={phoneNumber || ""}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            required
-          />
+        <div className="inputs-width">
+          <div className="inline-1">
+            <div>
+              <label htmlFor="contactNumber">
+                Contact Number<span className="star">*</span>
+              </label>
+              <input
+                type="tel"
+                id="contactNumber"
+                value={phoneNumber || ""}
+                onChange={(e) => {
+                  setPhoneNumber(e.target.value);
+                  onCustomerUpdate({
+                    ...selectedCustomer,
+                    Mobile: e.target.value,
+                  });
+                }}
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email">
+                Email<span className="star">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email || ""}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  onCustomerUpdate({
+                    ...selectedCustomer,
+                    Email: e.target.value,
+                  });
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="inline-2">
+            <div>
+              <label htmlFor="age">
+                Age<span className="star">*</span>
+              </label>
+              <input type="number" id="age" placeholder="Enter age" />
+            </div>
+
+            <div>
+              <label htmlFor="sex">
+                Sex<span className="star">*</span>
+              </label>
+              <select id="sex">
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email || ""}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="address">Address:</label>
+        <div className="form-group">
+          <label htmlFor="address">
+            Address<span className="star">*</span>
+          </label>
           <textarea
             id="address"
             value={address || ""}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => {
+              setAddress(e.target.value);
+              onCustomerUpdate({
+                ...selectedCustomer,
+                Address: e.target.value,
+              });
+            }}
             required
           />
         </div>
-
-        <div>
-          <label htmlFor="age">Age:</label>
-          <input type="number" id="age" placeholder="Enter age" />
-        </div>
-
-        <div>
-          <label htmlFor="sex">Sex:</label>
-          <select id="sex">
-            <option value="">Select</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <button type="submit">Submit</button>
       </form>
     </div>
   );
