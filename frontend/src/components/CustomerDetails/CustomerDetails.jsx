@@ -3,12 +3,16 @@ import axios from "axios";
 import Select from "react-select";
 import "./CustomerDetails.css";
 
-function CustomerDetails({ onCustomerUpdate }) {
+function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
   const [age, setAge] = useState("");
   const [sex, setSex] = useState("");
   const [abhaNumber, setAbhaNumber] = useState("");
@@ -28,10 +32,18 @@ function CustomerDetails({ onCustomerUpdate }) {
     setSelectedCustomer(customer);
     setEmail(customer ? customer.Email : "");
     setPhoneNumber(customer ? customer.Mobile || customer.Phone : "");
-    setAddress(customer ? customer.Address : "");
     setAge(customer ? customer.Age : "");
     setSex(customer ? customer.Sex : "");
     setAbhaNumber(customer ? customer.AbhaNumber : "");
+
+    if(customer && customer.Address) {
+      const addressParts = customer.Address.split(", ");
+      setAddress1(addressParts[0] || "");
+      setAddress2(addressParts[1] || "");
+      setPostalCode(addressParts[2] || "");
+      setCity(addressParts[3] || "");
+      setState(addressParts[4] || "");
+    }
 
     // Update the parent component with the selected customer details
     onCustomerUpdate(customer || {});
@@ -47,7 +59,7 @@ function CustomerDetails({ onCustomerUpdate }) {
       ...selectedCustomer,
       Email: email,
       Mobile: phoneNumber,
-      Address: address,
+      Address: `${address1}, ${address2}, ${postalCode}, ${city}, ${state}`,
       Age: age,
       Sex: sex,
       AbhaNumber: abhaNumber,
@@ -79,7 +91,7 @@ function CustomerDetails({ onCustomerUpdate }) {
           Age: parsedAge,
           Email: email,
           Mobile: phoneNumber,
-          Address: address,
+          Address: `${address1}, ${address2}, ${postalCode}, ${city}, ${state}`,
         });
       } else {
         // If parsed age is invalid, clear the input field
@@ -100,6 +112,18 @@ function CustomerDetails({ onCustomerUpdate }) {
       setAge(""); // Clear invalid age input
     }
   };
+
+  useEffect(() => {
+    // Update the address whenever any part of it changes
+    const fullAddress = `${address1}, ${address2}, ${postalCode}, ${city}, ${state}`;
+    onAddressUpdate(fullAddress); // Notify parent component with the full address
+    if(selectedCustomer){
+      onCustomerUpdate({
+        ...selectedCustomer,
+        Address: fullAddress,
+      })
+    }
+  }, [address1, address2, postalCode, city, state, onAddressUpdate,selectedCustomer,onCustomerUpdate]);
 
   return (
     <div className="customer-details-card">
@@ -140,7 +164,7 @@ function CustomerDetails({ onCustomerUpdate }) {
                       ...selectedCustomer,
                       Mobile: input,
                       Email: email, // Preserve current email
-                      Address: address, // Preserve current address
+                      Address: `${address1}, ${address2}, ${postalCode}, ${city}, ${state}`, // Preserve current address
                     });
                   }
                 }}
@@ -169,7 +193,7 @@ function CustomerDetails({ onCustomerUpdate }) {
                     ...selectedCustomer,
                     Email: input,
                     Mobile: phoneNumber, // Preserve current phone number
-                    Address: address, // Preserve current address
+                    Address: `${address1}, ${address2}, ${postalCode}, ${city}, ${state}`, // Preserve current address
                   });
                 }}
                 onBlur={() => {
@@ -225,12 +249,11 @@ function CustomerDetails({ onCustomerUpdate }) {
                   // Allow only 10 digits
                   if (value.length <= 14) {
                     setAbhaNumber(value);
-
                   }
                 }}
                 onBlur={() => {
                   if (abhaNumber && abhaNumber.length !== 14) {
-                    alert("Contact number must be exactly 14 digits.");
+                    alert("ABHA number must be exactly 14 digits.");
                   }
                 }}
                 required
@@ -240,24 +263,82 @@ function CustomerDetails({ onCustomerUpdate }) {
         </div>
 
         <div className="form-group">
-          <label htmlFor="address">
-            Address<span className="star">*</span>
+          <label htmlFor="address1">
+            Address Line 1<span className="star">*</span>
           </label>
-          <textarea
-            id="address"
-            value={address || ""}
-            onChange={(e) => {
-              const updateAddress = e.target.value;
-              setAddress(updateAddress);
-              onCustomerUpdate({
-                ...selectedCustomer,
-                Address: updateAddress,
-                Email: email,
-                Mobile: phoneNumber,
-              });
-            }}
+          <input
+            type="text"
+            id="address1"
+            value={address1}
+            placeholder="Enter address line 1"
+            onChange={(e) => setAddress1(e.target.value)}
             required
           />
+        </div>
+        <div className="form-group">
+          <label htmlFor="address2">Address Line 2</label>
+          <input
+            type="text"
+            id="address2"
+            value={address2}
+            placeholder="Enter address line 2"
+            onChange={(e) => setAddress2(e.target.value)}
+          />
+        </div>
+        <div className="inline-3">
+          <div className="inputs-width-2">
+            <label htmlFor="postalCode">
+              Postal Code<span className="star">*</span>
+            </label>
+            <input
+              type="number"
+              id="postalCode"
+              value={postalCode || ""}
+              placeholder="Enter Postal Code"
+              onChange={(e) => {
+                const value = e.target.value;
+
+                // Allow only 10 digits
+                if (value.length <= 6) {
+                  setPostalCode(value);
+                }
+              }}
+              onBlur={() => {
+                if (postalCode && postalCode.length !== 6) {
+                  alert("Postal Code must be exactly 6 digits.");
+                }
+              }}
+              required
+            />
+          </div>
+
+          <div className="inputs-width-5">
+            <label htmlFor="city">
+              City<span className="star">*</span>
+            </label>
+            <input
+              type="text"
+              id="city"
+              value={city}
+              placeholder="Enter city"
+              onChange={(e) => setCity(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="inputs-width-4">
+            <label htmlFor="state">
+              State<span className="star">*</span>
+            </label>
+            <input
+              type="text"
+              id="state"
+              value={state}
+              placeholder="Enter state"
+              onChange={(e) => setState(e.target.value)}
+              required
+            />
+          </div>
         </div>
       </form>
     </div>

@@ -8,6 +8,11 @@ import './OrderForm.css';
 const OrderForm = () => {
   const [customer, setCustomer] = useState(null); // Holds customer details
   const [productList, setProductList] = useState([]); // Holds list of added products
+  const [fullAddress, setFullAddress] = useState("");
+
+  const handleAddressChange = (address) => {
+    setFullAddress(address);
+  };
 
   // Update customer details when modified in CustomerDetails component
   const handleCustomerUpdate = (updatedCustomer) => {
@@ -23,7 +28,7 @@ const OrderForm = () => {
     <div>
       <NavBar />
       <div className="displaying">
-        <CustomerDetails onCustomerUpdate={handleCustomerUpdate} />
+        <CustomerDetails onAddressUpdate={handleAddressChange} onCustomerUpdate={handleCustomerUpdate} />
         <OrderSummary customer={customer} productList={productList} />
       </div>
         <ProductSearch onProductListUpdate={handleProductListUpdate} />
