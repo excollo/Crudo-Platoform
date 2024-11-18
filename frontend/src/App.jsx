@@ -1,18 +1,17 @@
+import { useState } from "react";
 import OrderForm from "./pages/OrderForm/OrderForm";
+import SignInPage from "./pages/Signin/SignInPage";
+import SignUpPage from "./pages/Signup/SignUpPage";
+import NavBar from "./components/SideBar/SideBar";
+import ProtectedRoute from "./components/ProtectedRoute";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
 } from "react-router-dom";
-import SignInPage from "./pages/Signin/SignInPage";
-import SignUpPage from "./pages/Signup/SignUpPage";
-import NavBar from "./components/SideBar/SideBar";
-import ProtectedRoute from "./components/ProtectedRoute";
 
-// Create a wrapper component to handle NavBar rendering
-const AppContent = () => {
-  // Use useLocation hook to get current path
+const AppContent = ({ customer, setCustomer, productList, setProductList }) => {
   const location = useLocation();
   const shouldShowNavbar = !["/signin", "/signup"].includes(location.pathname);
 
@@ -26,7 +25,12 @@ const AppContent = () => {
           path="/order"
           element={
             <ProtectedRoute>
-              <OrderForm />
+              <OrderForm
+                customer={customer}
+                setCustomer={setCustomer}
+                productList={productList}
+                setProductList={setProductList}
+              />
             </ProtectedRoute>
           }
         />
@@ -36,9 +40,17 @@ const AppContent = () => {
 };
 
 function App() {
+  const [customer, setCustomer] = useState(null); // Customer state
+  const [productList, setProductList] = useState([]); // Product list state
+
   return (
     <Router>
-      <AppContent />
+      <AppContent
+        customer={customer}
+        setCustomer={setCustomer}
+        productList={productList}
+        setProductList={setProductList}
+      />
     </Router>
   );
 }

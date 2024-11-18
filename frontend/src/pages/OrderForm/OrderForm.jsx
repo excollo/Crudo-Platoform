@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import CustomerDetails from "../../components/CustomerDetails/CustomerDetails";
-import ProductDetails from "../../components/ProductDetails";
+import ProductSearch from "../../components/ProductSearch/ProductSearch";
 import OrderSummary from "../../components/OrderSummary/OrderSummary";
 import NavBar from "../../components/NavBar/NavBar";
+import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import './OrderForm.css';
 
 const OrderForm = () => {
@@ -26,7 +27,8 @@ const OrderForm = () => {
         <CustomerDetails onCustomerUpdate={handleCustomerUpdate} />
         <OrderSummary customer={customer} productList={productList} />
       </div>
-      <ProductDetails onProductListUpdate={handleProductListUpdate} />
+        <ProductSearch onProductListUpdate={handleProductListUpdate} />
+        <ProductDetails />
     </div>
   );
 };

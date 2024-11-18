@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Select from "react-select";
+import './ProductSearch.css';
 
-const ProductDetails = ({ onProductListUpdate }) => {
+const ProductSearch = ({ onProductListUpdate }) => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [productList, setProductList] = useState([]);
@@ -59,7 +60,22 @@ const ProductDetails = ({ onProductListUpdate }) => {
   }));
 
   return (
-    <div className="product-details">
+    <div className="product-details-container">
+      <div className="product-details-container">
+        <div className="card">
+          <h2 className="section-header">Product Selection</h2>
+          <div className="search-container">
+            <input
+              className="search-input"
+              type="text"
+              placeholder="Search for medicines"
+            />
+            <span className="search-icon">🔍</span>
+          </div>
+          <div className="tags-container">{/* Tags here */}</div>
+        </div>
+        {/* Rest of your component */}
+      </div>
       <h3>Product Details</h3>
 
       {/* Dropdown for product selection */}
@@ -119,4 +135,4 @@ const ProductDetails = ({ onProductListUpdate }) => {
   );
 };
 
-export default ProductDetails;
+export default ProductSearch;

@@ -9,6 +9,11 @@ function CustomerDetails({ onCustomerUpdate }) {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [customerDetails, setCustomerDetails] = useState({
+    Email: "",
+    Mobile: "",
+    Address: "",
+  });
 
   useEffect(() => {
     axios
@@ -17,9 +22,23 @@ function CustomerDetails({ onCustomerUpdate }) {
       .catch((error) => console.error("Error fetching customers", error));
   }, []);
 
+  const handleInputChange = (field, value) => {
+  const updatedDetails = {
+    ...customerDetails,
+    [field]: value,
+  };
+  setCustomerDetails(updatedDetails);
+  onCustomerUpdate(updatedDetails);
+};
+
   const handleCustomerChange = (selectedOption) => {
     const customerId = selectedOption ? selectedOption.value : null;
     const customer = customers.find((cust) => cust.PKID === customerId);
+
+    const updatedCustomer = {
+      ...selectedCustomer,
+      ...customer,
+    }
 
     setSelectedCustomer(customer);
     setEmail(customer ? customer.Email : "");
@@ -27,7 +46,7 @@ function CustomerDetails({ onCustomerUpdate }) {
     setAddress(customer ? customer.Address : "");
 
     // Update the parent component with the selected customer details
-    onCustomerUpdate(customer);
+    onCustomerUpdate(customer || {});
   };
 
   const customerOptions = customers.map((customer) => ({
@@ -60,14 +79,16 @@ function CustomerDetails({ onCustomerUpdate }) {
                 Contact Number<span className="star">*</span>
               </label>
               <input
-                type="tel"
+                type="number"
                 id="contactNumber"
                 value={phoneNumber || ""}
+                placeholder="Enter contact number"
                 onChange={(e) => {
-                  setPhoneNumber(e.target.value);
+                  const updatePhoneNumber = e.target.value;
+                  setPhoneNumber(updatePhoneNumber);
                   onCustomerUpdate({
                     ...selectedCustomer,
-                    Mobile: e.target.value,
+                    Mobile: updatePhoneNumber,
                   });
                 }}
                 required
@@ -82,11 +103,13 @@ function CustomerDetails({ onCustomerUpdate }) {
                 type="email"
                 id="email"
                 value={email || ""}
+                placeholder="Enter email"
                 onChange={(e) => {
-                  setEmail(e.target.value);
+                  const updateEmail = e.target.value;
+                  setEmail(updateEmail);
                   onCustomerUpdate({
                     ...selectedCustomer,
-                    Email: e.target.value,
+                    Email: updateEmail,
                   });
                 }}
               />
@@ -123,10 +146,11 @@ function CustomerDetails({ onCustomerUpdate }) {
             id="address"
             value={address || ""}
             onChange={(e) => {
-              setAddress(e.target.value);
+              const updateAddress = e.target.value;
+              setAddress(updateAddress);
               onCustomerUpdate({
                 ...selectedCustomer,
-                Address: e.target.value,
+                Address: updateAddress,
               });
             }}
             required
