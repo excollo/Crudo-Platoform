@@ -115,7 +115,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
 
   useEffect(() => {
     // Update the address whenever any part of it changes
-    const fullAddress = `${address1}, ${address2}, ${postalCode}, ${city}, ${state}`;
+    const fullAddress = `${address1} ${address2} ${postalCode} ${city} ${state}`;
     onAddressUpdate(fullAddress); // Notify parent component with the full address
     if(selectedCustomer){
       onCustomerUpdate({
