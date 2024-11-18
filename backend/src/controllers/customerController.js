@@ -5,7 +5,7 @@ const { fetchCustomer } = require("../utils/fetchData");
 const getCustomers = async (req, res) => {
   // Extract page number, page size, and search query from the request query parameters
   // Set default values if not provided: pageNo = 1, pageSize = 2, search = ''
-  const { pageNo = 1, pageSize = 2, search = "" } = req.query;
+  const { pageNo = 1, pageSize = -1, search = "" } = req.query;
 
   try {
     // Call fetchCustomer to retrieve customers based on page number, page size, and search query

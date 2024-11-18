@@ -16,7 +16,7 @@ const headers = {
 };
 
 // Function to fetch a paginated list of customers
-const fetchCustomer = async (pageNo = 1, pageSize = 2, search = "") => {
+const fetchCustomer = async (pageNo = 1, pageSize = -1, search = "") => {
   try {
     // Send a POST request to the customer list endpoint with pagination and search parameters
     const response = await axios.post(
@@ -37,7 +37,7 @@ const fetchCustomer = async (pageNo = 1, pageSize = 2, search = "") => {
 };
 
 // Function to fetch a paginated list of products
-const fetchProduct = async (pageNo = 1, pageSize = 2, search = "") => {
+const fetchProduct = async (pageNo = 1, pageSize = -1, search = "") => {
   try {
     // Send a POST request to the product list endpoint with pagination and search parameters
     const response = await axios.post(

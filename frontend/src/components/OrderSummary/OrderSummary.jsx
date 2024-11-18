@@ -20,7 +20,7 @@ const OrderSummary = ({ customer, productList }) => {
         </p>
         <p>
           <strong>Contact Number:</strong>{" "}
-          {customer ? customer.Mobile || customer.Phone : "N/A"}
+          {customer ? customer.Mobile : "N/A"}
         </p>
         <p>
           <strong>Email:</strong> {customer ? customer.Email : "N/A"}

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import "./ProductDetails.css";
 
-
 const ProductDetails = ({ onProductListUpdate }) => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");

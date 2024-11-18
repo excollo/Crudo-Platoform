@@ -41,7 +41,7 @@
 }
 
 .inputs-width input {
-  width: 165%;
+  width: 175%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -58,6 +58,76 @@
   color: #333;
 }
 
+.inputs-width-2{
+   margin-bottom: 15px;
+}
+
+.inputs-width-2 label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
+  margin-top: -1rem;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.inputs-width-2 input {
+  width: 130%;
+  padding: 08px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+.inputs-width-3{
+    margin-bottom: 15px;
+}
+
+.inputs-width-3 label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
+  margin-top: -1rem;
+  margin-left: 1.2rem;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.inputs-width-3 select{
+  width: 150%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+  margin-left: 1.2rem;
+}
+
+.inputs-width-4{
+    margin-bottom: 15px;
+}
+
+.inputs-width-4 label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 7px;
+  margin-top: -1rem;
+  margin-left: 2rem;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.inputs-width-4 input{
+  width: 150%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+  margin-left: 2rem;
+}
+
 .inline-1{
     display: flex;
     gap: 11rem;
@@ -66,7 +136,7 @@
 
 .inline-2{
     display: flex;
-    gap: 11rem;
+    gap: 4rem;
 }
 
 .select-input{
@@ -107,3 +177,14 @@
 .star{
     color: red;
 }
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.address label{
+  display: flex;
+}
+

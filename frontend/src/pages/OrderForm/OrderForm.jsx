@@ -3,7 +3,6 @@ import CustomerDetails from "../../components/CustomerDetails/CustomerDetails";
 import ProductSearch from "../../components/ProductSearch/ProductSearch";
 import OrderSummary from "../../components/OrderSummary/OrderSummary";
 import NavBar from "../../components/NavBar/NavBar";
-import ProductDetails from "../../components/ProductDetails/ProductDetails";
 import './OrderForm.css';
 
 const OrderForm = () => {
@@ -28,7 +27,6 @@ const OrderForm = () => {
         <OrderSummary customer={customer} productList={productList} />
       </div>
         <ProductSearch onProductListUpdate={handleProductListUpdate} />
-        <ProductDetails />
     </div>
   );
 };
