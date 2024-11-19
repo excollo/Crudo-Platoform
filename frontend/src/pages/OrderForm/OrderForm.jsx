@@ -35,6 +35,49 @@ const OrderForm = () => {
   const handleCustomerUpdate = (updatedCustomer) => {
     setCustomer(updatedCustomer);
   };
+
+  const handleSubmitOrder = async () => {
+
+    const orderData = {
+      customer: {
+      name: customer.Party,
+      address: customer.Address,
+      phone: customer.Mobile,
+      email: customer.Email,
+      age: customer.Age,
+      sex: customer.Sex,
+    },
+    products: productList.map((product) => ({
+      productId: product.value,
+      name: product.label,
+      quantity: product.quantity,
+      price: product.MRP,
+    })),
+    totalMRP: productList.reduce(
+      (total, product) => total + product.MRP * product.quantity,
+      0
+    ),
+  }
+
+  console.log(orderData);
+  try {
+      const response = await fetch('http://localhost:3000/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert('Order saved successfully');
+      } else {
+        alert('Failed to save order');
+      }
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      alert('Error submitting order');
+  }
+}
+
   
 
   return (
@@ -48,8 +91,15 @@ const OrderForm = () => {
           />
           <OrderSummary customer={customer} productList={selectedProduct} />
         </div>
-        <ProductSearch selectedProduct={selectedProduct} onSelectedProductsChange={handleSelectedProductsChange} />
-        <ProductQuantity selectedProduct={selectedProduct} onQuantityChange={handleQuantityChange} />
+        <ProductSearch
+          selectedProduct={selectedProduct}
+          onSelectedProductsChange={handleSelectedProductsChange}
+        />
+        <ProductQuantity
+          selectedProduct={selectedProduct}
+          onQuantityChange={handleQuantityChange}
+        />
+        <button onClick={handleSubmitOrder}>Submit Order</button>
       </div>
     </div>
   );
