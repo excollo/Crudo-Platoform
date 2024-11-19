@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Select from "react-select";
-import './ProductSearch.css';
+import "./ProductSearch.css";
 
-const ProductSearch = ({ onProductListUpdate }) => {
+const ProductSearch = ({ onSelectedProductsChange, selectedProduct = [] }) => {
   const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [productList, setProductList] = useState([]);
-  const [quantity, setQuantity] = useState(1);
   const [productSearch, setProductSearch] = useState("");
 
   // Fetch products data on component mount
@@ -18,30 +15,42 @@ const ProductSearch = ({ onProductListUpdate }) => {
       .catch((error) => console.error("Error fetching products", error));
   }, []);
 
-  // Update selected product from dropdown
-  const handleProductChange = (selectedOption) => {
-    setSelectedProduct(selectedOption);
-  };
-
-  // Add the selected product with quantity to the product list
-  const handleAddProduct = () => {
-    if (selectedProduct) {
-      const newProductList = [
-        ...productList,
-        { ...selectedProduct, quantity: quantity },
-      ];
-      setProductList(newProductList);
-      onProductListUpdate(newProductList); // Send updated product list to parent component
-      setSelectedProduct(null); // Reset selection after adding product
-      setQuantity(1); // Reset quantity
+  // Update selected products, adding new ones with quantity 1
+  const handleProductChange = (selected) => {
+    if (!Array.isArray(selectedProduct)) {
+      console.error("selectedProduct is not an array!");
+      return;
     }
+
+    // Keep existing selected products and add the new ones
+    const updatedSelectedProducts = selected
+      ? selected.map((item) => ({
+          ...item,
+          quantity: 1, // Initialize new products with quantity 1
+        }))
+      : [];
+
+    // Merge selected products with previously selected ones without resetting quantities
+    const mergedProducts = [
+      ...selectedProduct,
+      ...updatedSelectedProducts.filter(
+        (newProduct) =>
+          !selectedProduct.some(
+            (existingProduct) => existingProduct.value === newProduct.value
+          )
+      ),
+    ];
+
+    // Pass updated list back to parent
+    onSelectedProductsChange(mergedProducts);
   };
 
-  // Remove a product from the list by index
-  const handleRemoveProduct = (index) => {
-    const updatedProductList = productList.filter((_, i) => i !== index);
-    setProductList(updatedProductList);
-    onProductListUpdate(updatedProductList); // Update parent component with new list
+  // Remove product from the selection
+  const removeProduct = (productToRemove) => {
+    const updatedProducts = selectedProduct.filter(
+      (product) => product.value !== productToRemove.value
+    );
+    onSelectedProductsChange(updatedProducts);
   };
 
   // Filter products based on search input
@@ -61,75 +70,34 @@ const ProductSearch = ({ onProductListUpdate }) => {
 
   return (
     <div className="product-details-container">
-      <div className="product-details-container">
-        <div className="card">
-          <h2 className="section-header">Product Selection</h2>
-          <div className="search-container">
-            <input
-              className="search-input"
-              type="text"
-              placeholder="Search for medicines"
-            />
-            <span className="search-icon">🔍</span>
-          </div>
-          <div className="tags-container">{/* Tags here */}</div>
-        </div>
-        {/* Rest of your component */}
-      </div>
-      <h3>Product Details</h3>
-
-      {/* Dropdown for product selection */}
-      <div className="product-selection">
-        <Select
-          options={productOptions}
-          value={selectedProduct}
-          onChange={handleProductChange}
-          placeholder="Select a product"
-        />
-      </div>
-
-      {/* Show product info and add to list option when a product is selected */}
-      {selectedProduct && (
-        <div className="product-info">
-          <p>
-            <strong>Unit Price:</strong> ₹{selectedProduct.MRP}
-          </p>
-          <p>
-            <strong>Stock Availability:</strong> {selectedProduct.Stock} items
-          </p>
-          <p>
-            <strong>Quantity:</strong>
-          </p>
-          <input
-            type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            min="1"
-            placeholder="Quantity"
-            required
+      <div className="card">
+        <h2 className="section-header">Product Selection</h2>
+        <div className="search-container">
+          <Select
+            className="search-input"
+            options={productOptions}
+            onChange={handleProductChange}
+            placeholder="🔍 Search for a product"
+            isMulti
           />
-          <button onClick={handleAddProduct}>Add Product</button>
+          {Array.isArray(selectedProduct) && selectedProduct.length > 0 && (
+            <div>
+              <ul>
+                {selectedProduct.map((product) => (
+                  <li className="product-info" key={product.value}>
+                    {product.label}
+                    <button
+                      className="remove-btn"
+                      onClick={() => removeProduct(product)}
+                    >
+                      X
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-      )}
-
-      {/* List of added products */}
-      <div className="added-products">
-        <h4>Added Products</h4>
-        <ul>
-          {productList.map((item, index) => (
-            <li key={index} className="product-item">
-              <span>
-                {item.label} - {item.quantity} pcs
-              </span>
-              <button
-                className="remove-product-btn"
-                onClick={() => handleRemoveProduct(index)}
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );

@@ -26,7 +26,26 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
 
 
   const handleCustomerChange = (selectedOption) => {
-    const customerId = selectedOption ? selectedOption.value : null;
+    if (!selectedOption) {
+      // If no customer is selected, reset the customer details
+      setSelectedCustomer(null);
+      setEmail("");
+      setPhoneNumber("");
+      setAge("");
+      setSex("");
+      setAbhaNumber("");
+      setAddress1("");
+      setAddress2("");
+      setPostalCode("");
+      setCity("");
+      setState("");
+
+      // Inform the parent that the customer is cleared
+      onCustomerUpdate({});
+      return;
+    }
+
+    const customerId = selectedOption.value;
     const customer = customers.find((cust) => cust.PKID === customerId);
 
     setSelectedCustomer(customer);
@@ -36,7 +55,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
     setSex(customer ? customer.Sex : "");
     setAbhaNumber(customer ? customer.AbhaNumber : "");
 
-    if(customer && customer.Address) {
+    if (customer && customer.Address) {
       const addressParts = customer.Address.split(", ");
       setAddress1(addressParts[0] || "");
       setAddress2(addressParts[1] || "");
@@ -49,32 +68,11 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
     onCustomerUpdate(customer || {});
   };
 
+
   const customerOptions = customers.map((customer) => ({
     value: customer.PKID,
     label: customer.UserName || "No Name",
   }));
-
-  const handleSaveCustomerDetails = () => {
-    const updatedDetails = {
-      ...selectedCustomer,
-      Email: email,
-      Mobile: phoneNumber,
-      Address: `${address1}, ${address2}, ${postalCode}, ${city}, ${state}`,
-      Age: age,
-      Sex: sex,
-      AbhaNumber: abhaNumber,
-    };
-
-    axios
-      .post("http://localhost:3000/api/saveCustomerDetails", updatedDetails)
-      .then((response) => {
-        alert("Customer details saved successfully!");
-      })
-      .catch((error) => {
-        console.error("Error saving customer details", error);
-        alert("Failed to save customer details.");
-      });
-  };
 
   const handleAgeChange = (e) => {
     const inputAge = e.target.value;
@@ -116,14 +114,29 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
   useEffect(() => {
     // Update the address whenever any part of it changes
     const fullAddress = `${address1} ${address2} ${postalCode} ${city} ${state}`;
-    onAddressUpdate(fullAddress); // Notify parent component with the full address
-    if(selectedCustomer){
-      onCustomerUpdate({
-        ...selectedCustomer,
-        Address: fullAddress,
-      })
+
+    // Only call onAddressUpdate if the full address is different
+    if (
+      fullAddress !== `${address1} ${address2} ${postalCode} ${city} ${state}`
+    ) {
+      onAddressUpdate(fullAddress); // Notify parent component with the full address
+      if (selectedCustomer) {
+        onCustomerUpdate({
+          ...selectedCustomer,
+          Address: fullAddress,
+        });
+      }
     }
-  }, [address1, address2, postalCode, city, state, onAddressUpdate,selectedCustomer,onCustomerUpdate]);
+  }, [
+    address1,
+    address2,
+    postalCode,
+    city,
+    state,
+    onAddressUpdate,
+    selectedCustomer,
+    onCustomerUpdate,
+  ]);
 
   return (
     <div className="customer-details-card">
@@ -152,7 +165,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
               <input
                 type="number"
                 id="contactNumber"
-                value={phoneNumber || ""}
+                value={phoneNumber}
                 placeholder="Enter contact number"
                 onChange={(e) => {
                   const input = e.target.value;
@@ -184,7 +197,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
               <input
                 type="email"
                 id="email"
-                value={email || ""}
+                value={email}
                 placeholder="Enter email"
                 onChange={(e) => {
                   const input = e.target.value;

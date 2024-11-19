@@ -2,7 +2,8 @@
 const express = require("express"); 
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const orderRoutes = require("./routes/apiRoutes"); 
+const orderRoutes = require("./routes/orderRoutes");
+const customerproductRoutes = require("./routes/apiRoutes");
 const authRoutes = require("./routes/authRoutes");
 const cors = require("cors"); 
 require("dotenv").config(); 
@@ -31,6 +32,7 @@ mongoose
 // Use the orderRoutes for all routes prefixed with "/api"
 app.use("/api", orderRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api", customerproductRoutes);
 
 // Define the server's port, using the value from environment variables or defaulting to 3000
 const PORT = process.env.PORT || 3000;

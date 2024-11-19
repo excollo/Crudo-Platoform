@@ -44,7 +44,9 @@ function App() {
   const [productList, setProductList] = useState([]); // Product list state
 
   return (
-    <Router>
+    <Router
+      futureFlags={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
       <AppContent
         customer={customer}
         setCustomer={setCustomer}
