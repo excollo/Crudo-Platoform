@@ -18,13 +18,16 @@ const OrderForm = () => {
   };
 
   const handleQuantityChange = (productId, newQuantity) => {
-    setSelectedProduct((prevProducts) =>
-      prevProducts.map((product) =>
-        product.value === productId
-          ? { ...product, quantity: newQuantity }
-          : product
-      )
+    const updatedProducts = selectedProduct.map((product) =>
+      product.value === productId
+        ? { ...product, quantity: newQuantity }
+        : product
     );
+
+    setSelectedProduct(updatedProducts); // selectedProduct update karna zaroori hai
+
+    // Update productList
+    setProductList(updatedProducts); // productList ko bhi sync mein rakho
   };
 
   const handleAddressChange = (address) => {
@@ -40,25 +43,24 @@ const OrderForm = () => {
 
     const orderData = {
       customer: {
-      name: customer.Party,
-      address: customer.Address,
-      phone: customer.Mobile,
-      email: customer.Email,
-      age: customer.Age,
-      sex: customer.Sex,
-    },
-    products: productList.map((product) => ({
-      productId: product.value,
-      name: product.label,
-      quantity: product.quantity,
-      price: product.MRP,
-    })),
-    totalMRP: productList.reduce(
-      (total, product) => total + product.MRP * product.quantity,
-      0
-    ),
-  }
-
+        name: customer.Party,
+        address: customer.Address,
+        phone: customer.Mobile,
+        email: customer.Email,
+        age: customer.parsedAge,
+        sex: customer.Sex,
+      },
+      products: productList.map((product) => ({
+        productId: product.value,
+        name: product.label,
+        quantity: product.quantity,
+        price: product.MRP,
+      })),
+      totalMRP: productList.reduce(
+        (sum, product) => sum + product.MRP * product.quantity,
+        0
+      ),
+    };
   console.log(orderData);
   try {
       const response = await fetch('http://localhost:3000/api/order', {
