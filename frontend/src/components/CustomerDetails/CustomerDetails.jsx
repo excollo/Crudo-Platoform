@@ -65,7 +65,10 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
     }
 
     // Update the parent component with the selected customer details
-    onCustomerUpdate(customer || {});
+    onCustomerUpdate({
+      ...customer,
+      Address: customer.Address || "",
+    });
   };
 
 
@@ -112,20 +115,18 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
   };
 
   useEffect(() => {
-    // Update the address whenever any part of it changes
     const fullAddress = `${address1} ${address2} ${postalCode} ${city} ${state}`;
 
-    // Only call onAddressUpdate if the full address is different
-    if (
-      fullAddress !== `${address1} ${address2} ${postalCode} ${city} ${state}`
-    ) {
-      onAddressUpdate(fullAddress); // Notify parent component with the full address
-      if (selectedCustomer) {
-        onCustomerUpdate({
-          ...selectedCustomer,
-          Address: fullAddress,
-        });
-      }
+    // Notify parent component with the full address
+    onAddressUpdate(fullAddress);
+
+    if (selectedCustomer) {
+      onCustomerUpdate({
+        ...selectedCustomer,
+        Address: fullAddress,
+        Email: email,
+        Mobile: phoneNumber,
+      });
     }
   }, [
     address1,
@@ -137,6 +138,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
     selectedCustomer,
     onCustomerUpdate,
   ]);
+
 
   return (
     <div className="customer-details-card">
