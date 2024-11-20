@@ -4,6 +4,7 @@ import ProductSearch from "../../components/ProductSearch/ProductSearch";
 import OrderSummary from "../../components/OrderSummary/OrderSummary";
 import ProductQuantity from "../../components/ProductQuantity/ProductQuantity";
 import NavBar from "../../components/NavBar/NavBar";
+import Button from "@mui/material/Button";
 import './OrderForm.css';
 
 const OrderForm = () => {
@@ -101,7 +102,9 @@ const OrderForm = () => {
           selectedProduct={selectedProduct}
           onQuantityChange={handleQuantityChange}
         />
-        <button onClick={handleSubmitOrder}>Submit Order</button>
+        <Button variant="contained" onClick={handleSubmitOrder} disableElevation>
+          Submit Order
+        </Button>
       </div>
     </div>
   );

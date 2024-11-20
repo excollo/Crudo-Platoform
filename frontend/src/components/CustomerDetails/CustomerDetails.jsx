@@ -243,7 +243,21 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
               <label htmlFor="sex">
                 Sex<span className="star">*</span>
               </label>
-              <select id="sex">
+              <select
+                id="sex"
+                value={sex}
+                onChange={(e) => {
+                  const selectedSex = e.target.value;
+                  setSex(selectedSex);
+                  onCustomerUpdate({
+                    ...selectedCustomer,
+                    Sex: selectedSex,
+                    Email: email,
+                    Mobile: phoneNumber,
+                    Address: `${address1} ${address2} ${postalCode} ${city} ${state}`,
+                  });
+                }}
+              >
                 <option value="">Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>

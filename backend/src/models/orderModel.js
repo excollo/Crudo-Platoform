@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
     phone: { type: Number, required: true },
     address: { type: String, required: true },
     age: { type: Number, required: false },
-    sex: { type: String, enum: ["Male", "Female", "Other"], required: true },
+    sex: { type: String, enum: ["Male", "Female", "Other"], required: false },
     abhanumber: { type: Number },
   },
   products: [
