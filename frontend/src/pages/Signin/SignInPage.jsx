@@ -22,7 +22,7 @@ const SignInPage = () => {
       const response = await signin({email,password});
       if(response.message){
         alert('Signin successful');
-        navigate('/order');
+        navigate('/order-details');
       }else{
         throw new Error('Signin failed');
       }

@@ -3,6 +3,7 @@ import OrderForm from "./pages/OrderForm/OrderForm";
 import SignInPage from "./pages/Signin/SignInPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
 import NavBar from "./components/SideBar/SideBar";
+import OrderDetails from "./pages/OrderDetails/OrderDetails";
 import ProtectedRoute from "./components/ProtectedRoute";
 import {
   BrowserRouter as Router,
@@ -22,7 +23,7 @@ const AppContent = ({ customer, setCustomer, productList, setProductList }) => {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route
-          path="/order"
+          path="/create-order"
           element={
             <ProtectedRoute>
               <OrderForm
@@ -34,6 +35,7 @@ const AppContent = ({ customer, setCustomer, productList, setProductList }) => {
             </ProtectedRoute>
           }
         />
+        <Route path="/order-details" element={<OrderDetails />} />
       </Routes>
     </div>
   );
