@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Select from "react-select";
-import "./CustomerDetails.css";
+import React, { useState, useEffect } from "react"; // Importing React hooks for state and effect management
+import axios from "axios"; // Importing axios for API requests
+import Select from "react-select"; // Importing react-select for dropdown select component
+import "./CustomerDetails.css"; // Importing custom CSS for styling
 
-function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
+function CustomerDetails({ onCustomerUpdate, onAddressUpdate }) {
+  // Defining state variables for customer details
   const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [email, setEmail] = useState("");
@@ -17,14 +18,15 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
   const [sex, setSex] = useState("");
   const [abhaNumber, setAbhaNumber] = useState("");
 
+  // Fetch customer data from the API on component mount
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/customers")
-      .then((response) => setCustomers(response.data))
-      .catch((error) => console.error("Error fetching customers", error));
-  }, []);
+      .then((response) => setCustomers(response.data)) // Set customer data to state
+      .catch((error) => console.error("Error fetching customers", error)); // Handle any errors
+  }, []); // Empty dependency array ensures the effect runs only once
 
-
+  // Handle customer selection change
   const handleCustomerChange = (selectedOption) => {
     if (!selectedOption) {
       // If no customer is selected, reset the customer details
@@ -40,14 +42,15 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
       setCity("");
       setState("");
 
-      // Inform the parent that the customer is cleared
+      // Inform parent component that the customer details are cleared
       onCustomerUpdate({});
       return;
     }
 
     const customerId = selectedOption.value;
-    const customer = customers.find((cust) => cust.PKID === customerId);
+    const customer = customers.find((cust) => cust.PKID === customerId); // Find the selected customer
 
+    // Set the selected customer's details to state
     setSelectedCustomer(customer);
     setEmail(customer ? customer.Email : "");
     setPhoneNumber(customer ? customer.Mobile || customer.Phone : "");
@@ -56,7 +59,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
     setAbhaNumber(customer ? customer.AbhaNumber : "");
 
     if (customer && customer.Address) {
-      const addressParts = customer.Address.split(", ");
+      const addressParts = customer.Address.split(", "); // Split the address string into components
       setAddress1(addressParts[0] || "");
       setAddress2(addressParts[1] || "");
       setPostalCode(addressParts[2] || "");
@@ -64,19 +67,20 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
       setState(addressParts[4] || "");
     }
 
-    // Update the parent component with the selected customer details
+    // Update parent component with selected customer details
     onCustomerUpdate({
       ...customer,
       Address: customer.Address || "",
     });
   };
 
-
+  // Generate customer options for the Select dropdown
   const customerOptions = customers.map((customer) => ({
     value: customer.PKID,
     label: customer.UserName || "No Name",
   }));
 
+  // Handle age input change, ensuring it's a valid number and within a specific range
   const handleAgeChange = (e) => {
     const inputAge = e.target.value;
 
@@ -106,6 +110,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
     }
   };
 
+  // Handle blur event to validate the age field
   const handleBlur = () => {
     const parsedAge = parseInt(age);
     if (age && (isNaN(parsedAge) || parsedAge < 1 || parsedAge > 99)) {
@@ -114,6 +119,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
     }
   };
 
+  // Update the parent component with the full address whenever address fields change
   useEffect(() => {
     const fullAddress = `${address1} ${address2} ${postalCode} ${city} ${state}`;
 
@@ -139,12 +145,13 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
     onCustomerUpdate,
   ]);
 
-
   return (
     <div className="customer-details-card">
+      {/* Form for capturing customer details */}
       <form className="form-handling">
         <h2>Customer Details</h2>
 
+        {/* Customer selection dropdown */}
         <div className="form-group">
           <label>
             Customer Name<span className="star">*</span>
@@ -161,6 +168,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
         <div>
           <div className="inline-1">
             <div className="inputs-width">
+              {/* Contact number input */}
               <label htmlFor="contactNumber">
                 Contact Number<span className="star">*</span>
               </label>
@@ -193,6 +201,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
             </div>
 
             <div className="inputs-width">
+              {/* Email input */}
               <label htmlFor="email">
                 Email<span className="star">*</span>
               </label>
@@ -226,6 +235,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
 
           <div className="inline-2">
             <div className="inputs-width-2">
+              {/* Age input */}
               <label htmlFor="age">
                 Age<span className="star">*</span>
               </label>
@@ -240,6 +250,7 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
             </div>
 
             <div className="inputs-width-3">
+              {/* Sex dropdown */}
               <label htmlFor="sex">
                 Sex<span className="star">*</span>
               </label>
@@ -266,107 +277,28 @@ function CustomerDetails({ onCustomerUpdate,onAddressUpdate }) {
             </div>
 
             <div className="inputs-width-4">
-              <label htmlFor="ABHA">ABHA Number</label>
+              {/* ABHA Number input */}
+              <label htmlFor="abhaNumber">
+                ABHA Number<span className="star">*</span>
+              </label>
               <input
-                type="number"
-                id="ABHA"
-                value={abhaNumber || ""}
-                placeholder="Enter contact number"
+                type="text"
+                id="abhaNumber"
+                value={abhaNumber}
+                placeholder="Enter ABHA number"
                 onChange={(e) => {
-                  const value = e.target.value;
-
-                  // Allow only 10 digits
-                  if (value.length <= 14) {
-                    setAbhaNumber(value);
-                  }
+                  const input = e.target.value;
+                  setAbhaNumber(input);
+                  onCustomerUpdate({
+                    ...selectedCustomer,
+                    AbhaNumber: input,
+                    Email: email,
+                    Mobile: phoneNumber,
+                    Address: `${address1} ${address2} ${postalCode} ${city} ${state}`,
+                  });
                 }}
-                onBlur={() => {
-                  if (abhaNumber && abhaNumber.length !== 14) {
-                    alert("ABHA number must be exactly 14 digits.");
-                  }
-                }}
-                required
               />
             </div>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="address1">
-            Address Line 1<span className="star">*</span>
-          </label>
-          <input
-            type="text"
-            id="address1"
-            value={address1}
-            placeholder="Enter address line 1"
-            onChange={(e) => setAddress1(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="address2">Address Line 2</label>
-          <input
-            type="text"
-            id="address2"
-            value={address2}
-            placeholder="Enter address line 2"
-            onChange={(e) => setAddress2(e.target.value)}
-          />
-        </div>
-        <div className="inline-3">
-          <div className="inputs-width-2">
-            <label htmlFor="postalCode">
-              Postal Code<span className="star">*</span>
-            </label>
-            <input
-              type="number"
-              id="postalCode"
-              value={postalCode || ""}
-              placeholder="Enter Postal Code"
-              onChange={(e) => {
-                const value = e.target.value;
-
-                // Allow only 10 digits
-                if (value.length <= 6) {
-                  setPostalCode(value);
-                }
-              }}
-              onBlur={() => {
-                if (postalCode && postalCode.length !== 6) {
-                  alert("Postal Code must be exactly 6 digits.");
-                }
-              }}
-              required
-            />
-          </div>
-
-          <div className="inputs-width-5">
-            <label htmlFor="city">
-              City<span className="star">*</span>
-            </label>
-            <input
-              type="text"
-              id="city"
-              value={city}
-              placeholder="Enter city"
-              onChange={(e) => setCity(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="inputs-width-4">
-            <label htmlFor="state">
-              State<span className="star">*</span>
-            </label>
-            <input
-              type="text"
-              id="state"
-              value={state}
-              placeholder="Enter state"
-              onChange={(e) => setState(e.target.value)}
-              required
-            />
           </div>
         </div>
       </form>
