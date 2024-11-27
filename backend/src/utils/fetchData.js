@@ -57,8 +57,25 @@ const fetchProduct = async (pageNo = 1, pageSize = -1, search = "") => {
   }
 };
 
+const fetchOrderDetails = async (id = 1714,FkID = 3) => {
+  try{
+    const response = await axios.post(`${TEST_BASE}api/transaction/salesorder/GetByIDMobile`,{}
+      ,{
+        headers,
+        params: {id,FkID}
+      }
+    );
+    return response.data || [];
+  }
+  catch(error){
+    console.error("Error fetching order details",error);
+    return [];
+  }
+}
+
 // Export the fetchCustomer and fetchProduct functions to make them accessible in other modules
 module.exports = {
   fetchCustomer,
   fetchProduct,
+  fetchOrderDetails,
 };

@@ -1,22 +1,62 @@
-import React from "react"; // Importing React to create the component
-import SideBar from "../../components/SideBar/SideBar"; // Importing the Sidebar component
-import TopBar from "./TopBar"; // Importing the TopBar component
-import Box from "@mui/material/Box/Box"; // Importing Box component from Material UI
-import { Paper } from "@mui/material"; // Importing Paper component from Material UI
-import Typography from "@mui/material/Typography"; // Importing Typography component for text styling
-import Grid from "@mui/material/Grid"; // Importing Grid for layout purposes
-import Divider from "@mui/material/Divider"; // Importing Divider to separate sections
-import Stack from "@mui/material/Stack"; // Importing Stack for spacing icons horizontally
-import IconButton from "@mui/material/IconButton"; // Importing IconButton for clickable icons
-import Print from "@mui/icons-material/Print"; // Importing Print icon
-import { Download } from "lucide-react"; // Importing Download icon from lucide-react
-import OrderStepper from "./OrderStepper"; // Importing OrderStepper to show steps in the order process
-import { Link as RouterLink } from "react-router-dom"; // Importing RouterLink for navigation within the app
-import ModeEditIcon from "@mui/icons-material/ModeEdit"; // Importing Edit icon
-import "./OrderDetails.css"; // Importing custom CSS file for styling
+import React from "react";
+import axios from "axios"; // Import axios for API calls
+import { useState,useEffect } from "react";
+import SideBar from "../../components/SideBar/SideBar"; // Import Sidebar component
+import TopBar from "./TopBar"; // Import TopBar component
+import Box from "@mui/material/Box/Box"; // Import Box component from Material UI
+import { Paper } from "@mui/material"; // Import Paper component from Material UI
+import Typography from "@mui/material/Typography"; // Import Typography for text styling
+import Grid from "@mui/material/Grid"; // Import Grid component for layout
+import Divider from "@mui/material/Divider"; // Import Divider component for dividing sections
+import Stack from "@mui/material/Stack"; // Import Stack for spacing components
+import IconButton from "@mui/material/IconButton"; // Import IconButton for clickable icons
+import Print from "@mui/icons-material/Print"; // Import Print icon
+import { Download } from "lucide-react"; // Import Download icon from lucide-react
+import OrderStepper from "./OrderStepper"; // Import OrderStepper component
+import { Link as RouterLink } from "react-router-dom"; // Import RouterLink for navigation
+import ModeEditIcon from "@mui/icons-material/ModeEdit"; // Import Edit icon for mode edit
+import "./OrderDetails.css"; // Import custom styles for OrderDetails component
 
 const OrderDetails = () => {
-  // Defining a sample orderSummary object that will hold order details
+  // Define orderSummary object with details for display
+  const [orderDetails, setOrderDetails] = useState({
+    PKID: "",
+    FKSeriesID: "",
+    Party: "",
+    CustomerAdd: "",
+    TaxAmt: 0,
+    TotalDisc: 0,
+    GrossAmt: 0,
+    ShippingAddressRemark: "",
+    NetAmt: 0,
+    DATE_MODIFIED: "",
+  });
+
+  useEffect(() => {
+    // Fetch order details from the server
+    const id = 1714;
+    const FkID = 3;
+    axios.get(`http://localhost:3000/api/orderdetails?id=${id}&FkID=${FkID}`)
+    .then((response) => {
+      const data = response.data
+      const {PKID,FKSeriesID ,Party, CustomerAdd, TaxAmt, TotalDisc, GrossAmt, ShippingAddressRemark, NetAmt, DATE_MODIFIED } = data;
+
+      setOrderDetails({
+        PKID,
+        FKSeriesID,
+        Party,
+        CustomerAdd,
+        TaxAmt,
+        TotalDisc,
+        GrossAmt,
+        ShippingAddressRemark,
+        NetAmt,
+        DATE_MODIFIED,
+      });
+    })
+    .catch((error) => console.error("Error fetching order details", error));
+  }, []);
+
   const orderSummary = {
     customerInfo: {
       name: "John Doe",
@@ -35,156 +75,166 @@ const OrderDetails = () => {
 
   return (
     <div>
-      <SideBar /> {/* Rendering the sidebar */}
+      {/* Sidebar component for navigation */}
+      <SideBar />
+      {/* Main content area styled with Box component */}
       <Box
-        p={15} // Applying padding of 15 to the Box component
+        p={15}
         sx={{
-          bgcolor: "#f5f5f5", // Setting background color
-          width: "100%", // Ensuring the Box takes full width
-          paddingTop: "64px", // Adding top padding to prevent overlap with fixed navbar
-          height: "90%", // Setting height to 90%
+          bgcolor: "#f5f5f5", // Background color
+          width: "100%",
+          paddingTop: "64px", // Padding from the top
+          height: "90%", // Set the height of the content
         }}
       >
-        <TopBar /> {/* Rendering the TopBar */}
+        {/* TopBar for page title or any header-related content */}
+        <TopBar />
+        {/* Paper component to give a card-like effect to the order details */}
         <Paper sx={{ p: 4, ml: 8, width: 1150 }}>
-          {" "}
-          {/* Paper component for content wrapper */}
           <Box sx={{ mb: 3 }}>
-            {" "}
-            {/* Box with margin-bottom */}
+            {/* Title for dispatch section */}
             <Typography variant="body" color="textPrimary" fontWeight={900}>
-              Dispatch {/* Title for the section */}
+              Dispatch
             </Typography>
+            {/* Order ID */}
             <Typography variant="body2" color="textSecondary">
-              #ORD-2024-004 {/* Order ID */}
+              #ORD{orderDetails.PKID}{orderDetails.FKSeriesID}
             </Typography>
           </Box>
-          <OrderStepper /> {/* Stepper component for order stages */}
+
+          {/* OrderStepper component to indicate the order progress */}
+          <OrderStepper />
+
+          {/* Grid layout to arrange content in two columns */}
           <Grid container spacing={3}>
-            {" "}
-            {/* Grid for responsive layout */}
+            {/* Left section for customer and item details */}
             <Grid item xs={12} md={7}>
-              {" "}
-              {/* Grid for the first section (Order Summary) */}
               <Grid sx={{ p: 3 }}>
+                {/* Order summary title with styled background */}
                 <Typography
                   variant="h6"
                   sx={{
                     backgroundImage:
-                      "var(--linear, linear-gradient(99deg, #FFB8B8 2.64%, #A0616A 100%))", // Gradient background
-                    color: "white", // Text color white
-                    p: 2, // Padding for the title
-                    ml: -3, // Left margin for positioning
-                    mr: -4, // Right margin for positioning
-                    fontWeight: "bold", // Bold text
-                    padding: 4, // Additional padding for spacing
-                    borderTopRightRadius: 8, // Border radius for top-right corner
-                    borderTopLeftRadius: 8, // Border radius for top-left corner
+                      "var(--linear, linear-gradient(99deg, #FFB8B8 2.64%, #A0616A 100%))",
+                    color: "white",
+                    p: 2,
+                    ml: -3,
+                    mr: -4,
+                    paddingLeft: 3,
+                    fontWeight: "bold",
+                    padding: 4,
+                    borderTopRightRadius: 8,
+                    borderTopLeftRadius: 8,
                   }}
                 >
-                  Order Summary {/* Section title */}
+                  Order Summary
                 </Typography>
+
+                {/* Customer Information section */}
                 <Box mb={4}>
-                  {" "}
-                  {/* Box for customer information section */}
                   <Typography
                     variant="h6"
-                    sx={{ fontWeight: "bold", mt: 3 }} // Bold and top margin
+                    sx={{ fontWeight: "bold", mt: 3 }}
                     gutterBottom
                   >
-                    Customer Information {/* Section title */}
+                    Customer Information
                   </Typography>
                   <Typography
                     sx={{
-                      color: "#9C8684", // Custom text color
-                      fontWeight: "300", // Light font weight
-                      textDecoration: "none", // No underline
+                      color: "#9C8684",
+                      fontWeight: "300",
+                      textDecoration: "none",
                       "&:hover": {
-                        textDecoration: "underline", // Underline on hover
-                        color: "#9C8684", // Maintain color on hover
+                        textDecoration: "underline",
+                        color: "#9C8684",
                       },
                     }}
-                    component={RouterLink} // Making the customer name a clickable link
-                    to="/profile" // Link to profile page
+                    component={RouterLink} // Link to customer profile page
+                    to="/profile"
                   >
-                    {orderSummary.customerInfo.name} {/* Customer name */}
+                    {orderDetails.Party}
                   </Typography>
-                  <Typography>{orderSummary.customerInfo.phone}</Typography>{" "}
-                  {/* Customer phone */}
-                  <Typography>
-                    {orderSummary.customerInfo.email}
-                  </Typography>{" "}
-                  {/* Customer email */}
+                  <Typography>{orderSummary.customerInfo.phone}</Typography>
+                  <Typography>{orderSummary.customerInfo.email}</Typography>
                 </Box>
-                <Divider sx={{ my: 2 }} /> {/* Divider to separate sections */}
+
+                {/* Divider between sections */}
+                <Divider sx={{ my: 2 }} />
+
+                {/* Items list section */}
                 <Typography
                   variant="h6"
-                  sx={{ fontWeight: "bold", fontSize: 15 }} // Bold and custom font size
+                  sx={{ fontWeight: "bold", fontSize: 15 }}
                   gutterBottom
                 >
-                  Items {/* Section title for ordered items */}
+                  Items
                 </Typography>
-                {/* Rendering items in the order */}
+
+                {/* Mapping over items to display each item in the order */}
                 {orderSummary.items.map((item, index) => (
                   <Box
                     key={index}
                     display="flex"
-                    justifyContent="space-between" // Items and prices on opposite sides
-                    mb={1} // Margin-bottom between items
+                    justifyContent="space-between"
+                    mb={1}
                   >
-                    <Typography>{`${item.quantity}x ${item.name}`}</Typography>{" "}
-                    {/* Item quantity and name */}
-                    <Typography>₹{item.price}</Typography> {/* Item price */}
+                    <Typography>{`${item.quantity}x ${item.name}`}</Typography>
+                    <Typography>₹{item.price}</Typography>
                   </Box>
                 ))}
+
+                {/* Subtotal, Taxes, Delivery, and Total sections */}
                 <Box>
-                  {/* Displaying subtotal, taxes, and delivery details */}
                   <Box display="flex" justifyContent="space-between" mb={1}>
                     <Typography>SubTotal</Typography>
-                    <Typography>₹{orderSummary.subtotal}</Typography>
+                    <Typography>₹{orderDetails.GrossAmt}</Typography>
                   </Box>
                   <Box display="flex" justifyContent="space-between" mb={1}>
                     <Typography>Taxes</Typography>
-                    <Typography>₹{orderSummary.taxes}</Typography>
+                    <Typography>₹{orderDetails.TaxAmt}</Typography>
+                  </Box>
+                  <Box display="flex" justifyContent="space-between" mb={1}>
+                    <Typography>Discount</Typography>
+                    <Typography>₹{orderDetails.TotalDisc}</Typography>
                   </Box>
                   <Box display="flex" justifyContent="space-between" mb={1}>
                     <Typography>Delivery</Typography>
                     <Typography>₹{orderSummary.delivery}</Typography>
                   </Box>
-                  <Divider sx={{ my: 2 }} />{" "}
-                  {/* Divider between price details */}
+                  <Divider sx={{ my: 2 }} />
                   <Box display="flex" justifyContent="space-between" mt={2}>
                     <Typography variant="h6">Total</Typography>
                     <Typography
-                      sx={{ fontWeight: "bold", fontSize: 25 }} // Bold and large font size for total
+                      sx={{ fontWeight: "bold", fontSize: 25 }}
                       variant="h6"
                     >
-                      ₹{orderSummary.total} {/* Total price */}
+                      ₹{orderDetails.NetAmt}
                     </Typography>
                   </Box>
                 </Box>
               </Grid>
             </Grid>
+
+            {/* Right section for delivery and agent details */}
             <Grid item xs={12} md={5}>
-              {" "}
-              {/* Grid for delivery details */}
               <Grid
                 sx={{
-                  pl: 4, // Padding-left
-                  mt: -22, // Margin-top adjustment
-                  border: "1px solid #0f0d0d", // Border around the delivery section
-                  borderRadius: 2, // Border radius
-                  p: 1, // Padding inside the box
+                  pl: 4,
+                  mt: -22,
+                  border: "1px solid #0f0d0d",
+                  borderRadius: 2,
+                  p: 1,
                 }}
               >
+                {/* Delivery details section */}
                 <Typography
-                  sx={{ fontWeight: "bold", fontSize: 18 }} // Bold and larger font size for title
+                  sx={{ fontWeight: "bold", fontSize: 18 }}
                   variant="h6"
                   gutterBottom
                 >
-                  Delivery Details {/* Section title */}
+                  Delivery Details
                 </Typography>
-                {/* Shipping Address, Agent Details, Confirmation, and Delivery Date */}
+                {/* Shipping Address */}
                 <Box mb={3}>
                   <Typography
                     sx={{ fontWeight: "bold", fontSize: 15 }}
@@ -193,10 +243,10 @@ const OrderDetails = () => {
                   >
                     Shipping Address
                   </Typography>
-                  <Typography>123, Lorem Ipsum, Dolor Sit, Amet</Typography>{" "}
-                  {/* Example address */}
+                  <Typography>{orderDetails.CustomerAdd}</Typography>
                 </Box>
 
+                {/* Agent Details */}
                 <Box mb={3}>
                   <Typography
                     sx={{ fontWeight: "bold", fontSize: 15 }}
@@ -209,18 +259,20 @@ const OrderDetails = () => {
                   <Typography>Phone no: #11234</Typography>
                 </Box>
 
+                {/* Order Confirmation Time */}
                 <Box mb={3}>
                   <Typography
                     sx={{ fontWeight: "bold", fontSize: 15 }}
                     variant="subtitle1"
                     gutterBottom
                   >
-                    Order Confirmation title
+                    Order Confirmation time
                   </Typography>
-                  <Typography>2024-11-20</Typography> {/* Confirmation date */}
-                  <Typography>12pm</Typography> {/* Confirmation time */}
+                  <Typography>{orderDetails.DATE_MODIFIED}</Typography>
+                  <Typography>12pm</Typography>
                 </Box>
 
+                {/* Delivery Date and Time */}
                 <Box mb={3}>
                   <Typography
                     sx={{ fontWeight: "bold", fontSize: 15 }}
@@ -229,38 +281,43 @@ const OrderDetails = () => {
                   >
                     Delivery Date and time
                   </Typography>
-                  <Typography>2024-11-21</Typography> {/* Delivery date */}
-                  <Typography>10 am - 12 am</Typography>{" "}
-                  {/* Delivery time window */}
+                  <Typography>{orderDetails.DATE_MODIFIED}</Typography>
+                  <Typography>10 am - 12 am</Typography>
                 </Box>
 
+                {/* Important Notes section */}
                 <Box>
                   <Typography
                     sx={{
                       fontWeight: "bold",
-                      fontSize: 18,
-                      color: "#A0616A", // Custom color for action items
-                      fontFamily: "Helvetica, sans-serif", // Custom font family
+                      fontSize: 15,
+                      display: "flex", // Flexbox for aligning text and icon
+                      alignItems: "center", // Align vertically
                     }}
+                    variant="subtitle1"
+                    gutterBottom
                   >
-                    Print {/* Title */}
+                    Important Notes
+                    <span>
+                      <ModeEditIcon sx={{ marginLeft: "8px" }} />{" "}
+                      {/* Edit icon */}
+                    </span>
                   </Typography>
-                  <Box>
-                    <Stack direction="row" spacing={2}>
-                      {" "}
-                      {/* Stack for horizontal icons */}
-                      <IconButton aria-label="print">
-                        <Print />
-                      </IconButton>
-                      <IconButton aria-label="download">
-                        <Download />
-                      </IconButton>
-                      <IconButton aria-label="edit">
-                        <ModeEditIcon />
-                      </IconButton>
-                    </Stack>
-                  </Box>
+
+                  <Typography>
+                    Store all Medications in Cool and Dry Place
+                  </Typography>
                 </Box>
+
+                {/* Action buttons for Print and Download */}
+                <Stack direction="row" spacing={1} mt={2}>
+                  <IconButton>
+                    <Print />
+                  </IconButton>
+                  <IconButton>
+                    <Download />
+                  </IconButton>
+                </Stack>
               </Grid>
             </Grid>
           </Grid>
@@ -270,4 +327,4 @@ const OrderDetails = () => {
   );
 };
 
-export default OrderDetails; // Exporting the component for use in other parts of the app
+export default OrderDetails;

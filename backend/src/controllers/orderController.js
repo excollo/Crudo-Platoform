@@ -1,5 +1,6 @@
 // Import the Order model to interact with the database for order-related operations
 const Order = require("../models/orderModel");
+const { fetchOrderDetails } = require("../utils/fetchData");
 
 // Controller function to create a new order
 const createOrder = async (req, res) => {
@@ -30,7 +31,21 @@ const createOrder = async (req, res) => {
   }
 };
 
+const orderDetails = async (req,res) => {
+  const {id,FkID} = req.query;
+  try {
+    const orderDetail = await fetchOrderDetails(id,FkID);
+    res.json(orderDetail);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching order details",
+      error: error.message,
+    });
+  }
+}
+
 // Export the createOrder function to be used in route handlers
 module.exports = {
   createOrder,
+  orderDetails,
 };
