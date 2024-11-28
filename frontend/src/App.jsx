@@ -5,6 +5,7 @@ import SignInPage from "./pages/Signin/SignInPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
 import NavBar from "./components/SideBar/SideBar";
 import OrderDetails from "./pages/OrderDetails/OrderDetails";
+import TrackOrder from "./pages/TrackOrder/TrackOrder";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Import React Router components for navigation
@@ -53,6 +54,7 @@ const AppContent = ({ customer, setCustomer, productList, setProductList }) => {
 
         {/* Order Details Route */}
         <Route path="/order-details" element={<OrderDetails />} />
+        <Route path="/track-order" element={<TrackOrder />} />
       </Routes>
     </div>
   );

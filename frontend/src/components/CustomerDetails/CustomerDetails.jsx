@@ -16,6 +16,7 @@ function CustomerDetails({ onCustomerUpdate, onAddressUpdate }) {
   const [age, setAge] = useState("");
   const [sex, setSex] = useState("");
   const [abhaNumber, setAbhaNumber] = useState("");
+  const [landmark, setLandmark] = useState("");
 
   useEffect(() => {
     axios
@@ -290,25 +291,63 @@ function CustomerDetails({ onCustomerUpdate, onAddressUpdate }) {
 
         <div className="form-group">
           <label htmlFor="address1">
-            Address Line 1<span className="star">*</span>
+            House No. & Floor<span className="star">*</span>
           </label>
           <input
             type="text"
             id="address1"
             value={address1}
-            placeholder="Enter address line 1"
-            onChange={(e) => setAddress1(e.target.value)}
+            placeholder="Enter House No. & Floor"
+            onChange={(e) => 
+              {
+                const value = e.target.value;
+                if(!value.includes(",")){
+                  setAddress1(value);
+                } else{
+                  alert("Address Line 1 cannot contain comma");
+                }
+              }}
+              maxLength={50}
             required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="address2">Address Line 2</label>
+          <label htmlFor="address2">Building & Block No.</label>
           <input
             type="text"
             id="address2"
             value={address2}
-            placeholder="Enter address line 2"
-            onChange={(e) => setAddress2(e.target.value)}
+            placeholder="Enter Building & Block No."
+            onChange={(e) => {
+              const value = e.target.value;
+              if(!value.includes(",")){
+                setAddress2(value);
+              }
+              else{
+                alert("Address Line 2 cannot contain comma");
+              }
+            }}
+            maxLength={50}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="landmark">Landmark & Area Name</label>
+          <input 
+          type="text"
+          id="landmark"
+          value={landmark}
+          placeholder="Enter Landmark & Area Name"
+          onChange={(e) => {
+            const value = e.target.value;
+            if(!value.includes(",")){
+              setLandmark(value);
+            }
+            else{
+              alert("Landmark cannot contain comma");
+            }
+          }} 
+          maxLength={50}
           />
         </div>
         <div className="inline-3">
@@ -347,7 +386,15 @@ function CustomerDetails({ onCustomerUpdate, onAddressUpdate }) {
               id="city"
               value={city}
               placeholder="Enter city"
-              onChange={(e) => setCity(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if(!value.includes(",")){
+                  setCity(value);
+                }
+                else{
+                  alert("City cannot contain comma");
+                }
+              }}
               required
             />
           </div>
@@ -361,7 +408,15 @@ function CustomerDetails({ onCustomerUpdate, onAddressUpdate }) {
               id="state"
               value={state}
               placeholder="Enter state"
-              onChange={(e) => setState(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if(!value.includes(",")){
+                  setState(value);
+                }
+                else{
+                  alert("State cannot contain comma");
+                }
+              }}
               required
             />
           </div>
