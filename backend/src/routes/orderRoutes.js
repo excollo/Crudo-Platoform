@@ -9,7 +9,7 @@ const { createOrder, orderDetails } = require("../controllers/orderController");
 
 // Define the route for creating an order
 // This route handles POST requests to "/order" and invokes the createOrder function from the controller
-router.post("/order", createOrder);
+router.post("/createorder", createOrder);
 router.get("/orderdetails", orderDetails);
 
 // Export the router to be used in the main app or other modules

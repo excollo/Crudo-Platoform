@@ -74,7 +74,7 @@ const OrderForm = () => {
 
     try {
       // Send order data to backend API
-      const response = await fetch("http://localhost:3000/api/order", {
+      const response = await fetch("http://localhost:3000/api/createorder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
