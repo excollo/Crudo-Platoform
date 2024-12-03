@@ -2,7 +2,7 @@
 import React from "react";
 import { IoMdNotificationsOutline } from "react-icons/io"; // Notification icon
 import { CiSearch } from "react-icons/ci"; // Search icon (though not used here)
-import "./NavBar.css"; // Import CSS file for styling the NavBar
+import "./TopBar.css"; // Import CSS file for styling the NavBar
 
 // Define the NavBar component
 const NavBar = () => {

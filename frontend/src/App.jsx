@@ -1,6 +1,6 @@
 import { useState } from "react";
 // Import page and component components
-import OrderForm from "./pages/OrderForm/OrderForm";
+import OrderForm from "./pages/CreateOrder/CreateOrderForm";
 import SignInPage from "./pages/Signin/SignInPage";
 import SignUpPage from "./pages/Signup/SignUpPage";
 import NavBar from "./components/SideBar/SideBar";

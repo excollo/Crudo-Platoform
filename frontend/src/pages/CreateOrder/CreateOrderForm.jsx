@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import CustomerDetails from "../../components/CustomerDetails/CustomerDetails"; // Component for customer info
-import ProductSearch from "../../components/ProductSearch/ProductSearch"; // Component for searching products
-import OrderSummary from "../../components/OrderSummary/OrderSummary"; // Component for displaying order summary
-import ProductQuantity from "../../components/ProductQuantity/ProductQuantity"; // Component for product quantity adjustment
-import NavBar from "../../components/NavBar/NavBar"; // Navigation bar component
+import CustomerDetails from "./CustomerDetails/CustomerDetails"; // Component for customer info
+import ProductSearch from "./ProductSearch/ProductSearch"; // Component for searching products
+import OrderSummary from "./OrderSummary/OrderSummary"; // Component for displaying order summary
+import ProductQuantity from "./ProductQuantity/ProductQuantity"; // Component for product quantity adjustment
+import NavBar from "./TopBar/TopBar"; // Navigation bar component
 import Button from "@mui/material/Button"; // Material UI Button component
-import "./OrderForm.css"; // CSS file for styling
+import "./CreateOrderForm.css"; // CSS file for styling
 
 const OrderForm = () => {
   // State variables to store customer details, product list, address, and selected products

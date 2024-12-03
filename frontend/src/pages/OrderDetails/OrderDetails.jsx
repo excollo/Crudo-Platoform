@@ -15,7 +15,6 @@ import { Download } from "lucide-react"; // Import Download icon from lucide-rea
 import OrderStepper from "./OrderStepper"; // Import OrderStepper component
 import { Link as RouterLink } from "react-router-dom"; // Import RouterLink for navigation
 import ModeEditIcon from "@mui/icons-material/ModeEdit"; // Import Edit icon for mode edit
-import "./OrderDetails.css"; // Import custom styles for OrderDetails component
 
 const OrderDetails = () => {
   // Define orderSummary object with details for display
