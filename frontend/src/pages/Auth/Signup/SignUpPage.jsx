@@ -1,7 +1,7 @@
 // Import necessary dependencies from React, React Router, and other packages
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signup } from "../../api/api"; // Import the signup function from the API file
+import { signup } from "../../../api/api"; // Import the signup function from the API file
 import MedicineImage from "../../assets/images/SignupPageImage.jpg"; // Image for the page's right section
 import logo from "../../assets/images/logo.svg"; // Logo image
 import { FaEyeSlash } from "react-icons/fa"; // Eye icon for hiding password
