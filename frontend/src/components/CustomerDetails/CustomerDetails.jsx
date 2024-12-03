@@ -122,9 +122,12 @@ function CustomerDetails({ onCustomerUpdate, onAddressUpdate }) {
     if (selectedCustomer) {
       onCustomerUpdate({
         ...selectedCustomer,
+        Age: age,
+        Value: selectedCustomer.PKID,
         Address: fullAddress,
         Email: email,
         Mobile: phoneNumber,
+        Sex: sex,
       });
     }
   }, [

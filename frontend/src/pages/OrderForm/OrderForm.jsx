@@ -49,11 +49,12 @@ const OrderForm = () => {
     // Create order data object to send to the backend
     const orderData = {
       customer: {
+        customerId: customer.Value,
         name: customer.Party,
         address: customer.Address,
         phone: customer.Mobile,
         email: customer.Email,
-        age: customer.parsedAge,
+        age: customer.Age,
         sex: customer.Sex,
       },
       products: productList.map((product) => ({

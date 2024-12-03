@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const orderSchema = new mongoose.Schema({
   // Customer details object
   customer: {
+    customerId: { type: Number, required: true },
     // Customer's name (required field)
     name: { type: String, required: true },
 
@@ -18,10 +19,10 @@ const orderSchema = new mongoose.Schema({
     address: { type: String, required: true },
 
     // Customer's age (optional field)
-    age: { type: Number, required: false },
+    age: { type: Number, required: true },
 
     // Customer's gender with limited options (optional field)
-    sex: { type: String, enum: ["Male", "Female", "Other"], required: false },
+    sex: { type: String, enum: ["Male", "Female", "Other"], required: true },
 
     // Customer's ABHA (Ayushman Bharat Health Account) number (optional field)
     abhanumber: { type: Number },
@@ -46,6 +47,7 @@ const orderSchema = new mongoose.Schema({
 
   // Total Maximum Retail Price (MRP) for the order (required field)
   totalMRP: { type: Number, required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
 // Create a Mongoose model named 'Order' based on the orderSchema

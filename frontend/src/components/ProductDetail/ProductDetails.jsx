@@ -8,15 +8,6 @@ const ProductDetails = ({ onProductListUpdate }) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [quantities, setQuantities] = useState({});
 
-  // Mock data - replace with your API call
-  useEffect(() => {
-    const mockProducts = [
-      { id: 1, name: "Dolo", price: 500, stock: 200 },
-      { id: 2, name: "Paracetamol", price: 500, stock: 200 },
-    ];
-    setProducts(mockProducts);
-  }, []);
-
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
