@@ -10,8 +10,6 @@ const { getCustomers } = require("../controllers/customerController");
 // Import the getProducts function from the product controller
 const { getProducts } = require("../controllers/productController");
 
-const authMiddleware = require("../middleware/authMiddleware");
-
 // Define a route for GET requests to '/customers' that invokes the getCustomers function
 router.get("/customers", getCustomers);
 

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 // Define a schema for the Customer model
 const customerSchema = new mongoose.Schema({
+  customerId: { type: Number, required: true },
   // Define the 'fullname' field, which is a required string
   fullname: { type: String, required: true },
 
