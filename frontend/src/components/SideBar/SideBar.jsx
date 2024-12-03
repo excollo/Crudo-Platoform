@@ -1,6 +1,14 @@
-// Importing necessary dependencies and components
-import React from "react";
-// Importing icons from lucide-react for use in the sidebar menu
+import React, { useState } from "react";
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Avatar,
+  Divider,
+} from "@mui/material";
 import {
   Home,
   BarChart2,
@@ -10,78 +18,117 @@ import {
   Settings,
   User,
 } from "lucide-react";
-// Importing the logo image to display in the sidebar
 import logo from "../../assets/images/logo.svg";
-// Importing CSS file for styling the Sidebar component
-import "./Sidebar.css";
 
-// Sidebar component that displays a navigation menu
 const Sidebar = () => {
-  // Defining the menu items array, which includes the icon, label, and path for each menu item
+  const [selected, setSelected] = useState(window.location.pathname);
+
   const menuItems = [
-    { icon: <Home size={24} />, label: "Dashboard", path: "/dashboard" }, // Dashboard item
-    { icon: <BarChart2 size={24} />, label: "Analytics", path: "/analytics" }, // Analytics item
+    { icon: <Home size={24} />, label: "Dashboard", path: "/dashboard" },
+    { icon: <BarChart2 size={24} />, label: "Analytics", path: "/analytics" },
     {
       icon: <FileText size={24} />,
       label: "Prescription Management",
-      path: "/prescriptions", // Prescription Management item
+      path: "/prescriptions",
     },
     {
       icon: <ShoppingCart size={24} />,
       label: "Order Management",
-      path: "/create-order", // Order Management item
+      path: "/create-order",
     },
-    {
-      icon: <ClipboardList size={24} />,
-      label: "Audit Log",
-      path: "/audit", // Audit Log item
-    },
-    {
-      icon: <Settings size={24} />,
-      label: "Settings",
-      path: "/settings", // Settings item
-    },
+    { icon: <ClipboardList size={24} />, label: "Audit Log", path: "/audit" },
+    { icon: <Settings size={24} />, label: "Settings", path: "/settings" },
   ];
 
   return (
-    // Main container for the Sidebar component
-    <div className="container-1">
-      {/* Sidebar logo section, displaying the company logo */}
-      <div className="logo-image">
-        <img src={logo} alt="Logo" /> {/* Displaying the logo image */}
-      </div>
+    <Box
+      sx={{
+        width: { xs: 80, sm: 120 },
+        minHeight: "100vh",
+        bgcolor: "background.paper",
+        borderRight: 1,
+        borderColor: "divider",
+        padding: 2,
+        display: "flex",
+        flexDirection: "column",
+        position: "fixed",
+        top: 0,
+        left: 0,
+      }}
+    >
+      <Box sx={{ padding: 1, marginBottom: 2 }}>
+        <img
+          src={logo}
+          alt="Logo"
+          style={{ maxWidth: "100%", height: "auto" }}
+        />
+      </Box>
 
-      {/* Navigation menu section */}
-      <nav className="image-1">
-        {/* Unordered list to display menu items */}
-        <ul>
-          {menuItems.map((item, index) => (
-            // Mapping through menuItems array to generate list items for each menu
-            <li key={index}>
-              {/* Anchor tag linking to the specified path */}
-              <a href={item.path}>
-                {/* Displaying the icon for each menu item */}
-                <span>{item.icon}</span>
-                {/* Displaying the label for each menu item */}
-                <span>{item.label}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <List sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1 }}>
+        {menuItems.map((item, index) => (
+          <ListItem key={index} disablePadding>
+            <ListItemButton
+              component="a"
+              href={item.path}
+              onClick={() => setSelected(item.path)}
+              sx={{
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+                padding: "0.75rem 0.5rem",
+                borderRadius: 1,
+                transition: "all 0.2s ease-in-out",
+                bgcolor:
+                  selected === item.path ? "action.hover" : "transparent",
+                color: selected === item.path ? "#926B6B" : "text.secondary",
+                "&:hover": {
+                  bgcolor: "action.hover",
+                  color: "#926B6B",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  justifyContent: "center",
+                  color: selected === item.path ? "#926B6B" : "text.secondary",
+                  "&:hover": { color: "#926B6B" },
+                  marginBottom: 0.5,
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText
+                primary={item.label}
+                primaryTypographyProps={{
+                  fontSize: "0.75rem",
+                  fontWeight: 500,
+                  whiteSpace: "normal",
+                  textAlign: "center",
+                  lineHeight: 1.2,
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
 
-      {/* User section, likely for profile or settings */}
-      <div>
-        <div>
-          <div>
-            {/* Displaying the User icon, probably for user-related actions */}
-            <User size={20} />
-          </div>
-        </div>
-      </div>
-    </div>
+      <Box
+        sx={{
+          marginTop: "auto",
+          paddingTop: 2,
+          display: "flex",
+          alignItems: "center",
+          marginLeft: 2.9,
+        }}
+      >
+        <Avatar sx={{ bgcolor: "grey.300", marginRight: 1.5,cursor: "pointer" }}>
+          <User size={20} />
+        </Avatar>
+      </Box>
+    </Box>
   );
 };
 
-// Exporting Sidebar component to be used in other parts of the application
 export default Sidebar;
