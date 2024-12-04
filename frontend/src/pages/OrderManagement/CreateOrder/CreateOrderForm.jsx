@@ -7,7 +7,7 @@ import NavBar from "./TopBar/TopBar"; // Navigation bar component
 import Button from "@mui/material/Button"; // Material UI Button component
 import "./CreateOrderForm.css"; // CSS file for styling
 
-const OrderForm = () => {
+const CreateOrderForm = () => {
   // State variables to store customer details, product list, address, and selected products
   const [customer, setCustomer] = useState(null); // Holds customer details
   const [productList, setProductList] = useState([]); // Holds list of added products
@@ -133,4 +133,4 @@ const OrderForm = () => {
   );
 };
 
-export default OrderForm; // Export the OrderForm component for use in other parts of the app
+export default CreateOrderForm; // Export the OrderForm component for use in other parts of the app

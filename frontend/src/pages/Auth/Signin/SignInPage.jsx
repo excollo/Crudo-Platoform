@@ -2,8 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useNavigate,Link } from 'react-router-dom';
 import { signin } from '../../../api/api';
-import MedicineImage from "../../assets/images/SignupPageImage.jpg"; // Image for the page's right section
-import logo from "../../assets/images/logo.svg"; // Logo image
+import logo from "../../../assets/images/logo.svg"; // Logo image
 import { FaEyeSlash } from "react-icons/fa"; // Eye icon for hiding password
 import { FaEye } from "react-icons/fa"; // Eye icon for showing password
 import "./SigninPage.css"; // Import CSS for styling the page
@@ -100,9 +99,9 @@ const SignInPage = () => {
         </div>
       </div>
       {/* Right section with a background image */}
-      <div className="right-section-1">
+      {/* <div className="right-section-1">
         <img className="image-medicine" src={MedicineImage} alt="" />
-      </div>
+      </div> */}
     </div>
   );
 }

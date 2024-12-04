@@ -1,11 +1,11 @@
 import { useState } from "react";
 // Import page and component components
-import OrderForm from "./pages/CreateOrder/CreateOrderForm";
-import SignInPage from "./pages/Signin/SignInPage";
-import SignUpPage from "./pages/Signup/SignUpPage";
+import SignInPage from "./pages/Auth/Signin/SignInPage";
+import SignUpPage from "./pages/Auth/Signup/SignUpPage";
+import CreateOrderForm from "./pages/OrderManagement/CreateOrder/CreateOrderForm";
 import NavBar from "./components/SideBar/SideBar";
-import OrderDetails from "./pages/OrderDetails/OrderDetails";
-import TrackOrder from "./pages/TrackOrder/TrackOrder";
+import OrderDetails from "./pages/OrderManagement/OrderDetails/OrderDetails";
+import TrackOrder from "./pages/OrderManagement/TrackOrder/TrackOrder";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Import React Router components for navigation
@@ -42,7 +42,7 @@ const AppContent = ({ customer, setCustomer, productList, setProductList }) => {
           element={
             // Wrap order form in protected route to ensure authentication
             <ProtectedRoute>
-              <OrderForm
+              <CreateOrderForm
                 customer={customer}
                 setCustomer={setCustomer}
                 productList={productList}

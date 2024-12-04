@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios"; // Import axios for API calls
 import { useState,useEffect } from "react";
-import SideBar from "../../components/SideBar/SideBar"; // Import Sidebar component
+import SideBar from "../../../components/SideBar/SideBar"; // Import Sidebar component
 import TopBar from "./TopBar"; // Import TopBar component
 import Box from "@mui/material/Box/Box"; // Import Box component from Material UI
 import { Paper } from "@mui/material"; // Import Paper component from Material UI

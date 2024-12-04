@@ -1,9 +1,8 @@
 // Import necessary dependencies from React, React Router, and other packages
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signup } from "../../../api/api"; // Import the signup function from the API file
-import MedicineImage from "../../assets/images/SignupPageImage.jpg"; // Image for the page's right section
-import logo from "../../assets/images/logo.svg"; // Logo image
+import { signup } from "../../../api/api"; // Import the signup function from the API file// Image for the page's right section
+import logo from "../../../assets/images/logo.svg"; // Logo image
 import { FaEyeSlash } from "react-icons/fa"; // Eye icon for hiding password
 import { FaEye } from "react-icons/fa"; // Eye icon for showing password
 import "./SignUpPage.css"; // Import CSS for styling the page
@@ -126,9 +125,9 @@ const SignUpPage = () => {
         </div>
       </div>
       {/* Right section with a background image */}
-      <div className="right-section">
+      {/* <div className="right-section">
         <img className="image-medicine" src={MedicineImage} alt="" />
-      </div>
+      </div> */}
     </div>
   );
 };
