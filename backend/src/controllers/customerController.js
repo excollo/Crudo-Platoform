@@ -1,5 +1,5 @@
 // Import the fetchCustomer function from the fetchData utility module
-const { fetchCustomer } = require("../utils/fetchData");
+const { fetchCustomer,fetchCustomerOrders } = require("../utils/fetchData");
 
 // Define an asynchronous function to handle the GET request for customers
 const getCustomers = async (req, res) => {
@@ -23,7 +23,33 @@ const getCustomers = async (req, res) => {
   }
 };
 
+const getCustomerOrders = async (req,res) => {
+  const customerId = req.params.customerId;
+  try{
+    if(!customerId){
+      return res.status(400).json({
+        message: "Customer ID is required",
+      })
+    }
+
+    const customerOrders = await fetchCustomerOrders(customerId);
+
+    res.json({
+      message: "Customer orders fetched successfully",
+      orders: customerOrders.length,
+      orders: customerOrders,
+    })
+  }
+  catch(error){
+    res.status(500).json({
+      message: "Error fetching customer orders",
+      error: error.message,
+    })
+  }
+}
+
 // Export the getCustomers function to make it available for other modules
 module.exports = {
   getCustomers,
+  getCustomerOrders,
 };

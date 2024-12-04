@@ -47,7 +47,7 @@ const orderSchema = new mongoose.Schema({
 
   // Total Maximum Retail Price (MRP) for the order (required field)
   totalMRP: { type: Number, required: true },
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now, index: -1 },
 });
 
 // Create a Mongoose model named 'Order' based on the orderSchema

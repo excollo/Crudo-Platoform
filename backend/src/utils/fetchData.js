@@ -1,6 +1,6 @@
 // Import the Axios library for making HTTP requests
 const axios = require("axios");
-
+const Order = require("../models/orderModel");
 // Load environment variables from a .env file
 require("dotenv").config();
 
@@ -73,9 +73,22 @@ const fetchOrderDetails = async (id = 1714,FkID = 3) => {
   }
 }
 
+const fetchCustomerOrders = async (customerId) => {
+  try{
+    const orders = await Order.find({'customer.customerId': customerId})
+      .sort({createdAt: -1})
+      return orders;
+  }
+  catch(error){
+    console.error("Error fetching customer orders",error);
+    return [];
+  }
+}
+
 // Export the fetchCustomer and fetchProduct functions to make them accessible in other modules
 module.exports = {
   fetchCustomer,
   fetchProduct,
   fetchOrderDetails,
+  fetchCustomerOrders
 };
