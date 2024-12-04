@@ -6,6 +6,7 @@ import CreateOrderForm from "./pages/OrderManagement/CreateOrder/CreateOrderForm
 import NavBar from "./components/SideBar/SideBar";
 import OrderDetails from "./pages/OrderManagement/OrderDetails/OrderDetails";
 import TrackOrder from "./pages/OrderManagement/TrackOrder/TrackOrder";
+import CustomerOrder from "./pages/CustomerOrders/CustomerOrder";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Import React Router components for navigation
@@ -51,6 +52,7 @@ const AppContent = ({ customer, setCustomer, productList, setProductList }) => {
             </ProtectedRoute>
           }
         />
+        <Route path="/customer-order" element={<CustomerOrder/>}/>
 
         {/* Order Details Route */}
         <Route path="/order-details" element={<OrderDetails />} />

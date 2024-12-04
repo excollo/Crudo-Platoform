@@ -4,9 +4,7 @@ import TopBar from './TopBar'
 import { Box } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import FilterButton from './FilterButton';
-import { Link as RouterLink } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { Table, TableHead, TableRow, TableCell,TableBody } from '@mui/material';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { Checkbox } from '@mui/material';
@@ -63,7 +61,7 @@ const TrackOrder = () => {
             type="search"
             placeholder="🔍 Search"
             style={{
-              width: "76%",
+              width: "90%",
               padding: "10px 15px",
               fontSize: "16px",
               border: "1px solid #E0E0E0",
@@ -71,7 +69,6 @@ const TrackOrder = () => {
             }}
           />
           <FilterButton />
-          <DateFilterButton />
         </Paper>
         <Paper
           sx={{
@@ -111,12 +108,24 @@ const TrackOrder = () => {
                     }}
                   />
                 </TableCell>
-                <TableCell>Order ID</TableCell>
-                <TableCell>Customer Name</TableCell>
-                <TableCell>Phone No.</TableCell>
-                <TableCell>Order Date</TableCell>
-                <TableCell>Order Amount</TableCell>
-                <TableCell>Status</TableCell>
+                <TableCell>
+                  <strong>Order ID</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Customer Name</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Phone No.</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Order Date</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Order Amount</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Status</strong>
+                </TableCell>
                 <TableCell>
                   <FontAwesomeIcon icon={faEllipsisVertical} />
                 </TableCell>

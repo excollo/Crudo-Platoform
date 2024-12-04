@@ -17,7 +17,6 @@ router.get("/customers", getCustomers);
 router.get("/product", getProducts);
 
 router.get("/customerorders/:customerId/orders",(req,res,next) => {
-    console.log(req.params.customerId);
     next();
 }, getCustomerOrders);
 
