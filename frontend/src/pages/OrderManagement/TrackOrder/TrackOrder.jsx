@@ -8,11 +8,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Table, TableHead, TableRow, TableCell,TableBody } from '@mui/material';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { Checkbox } from '@mui/material';
-import DateFilterButton from './DateFilterButton';
+import './TrackOrder.css'
 
 const TrackOrder = () => {
   const [selectedOrders, setSelectedOrders] = useState([]);
-
+  const [selectedTimeframe, setSelectedTimeframe] = useState("All");
   const handleCheckboxChange = (orderId) => {
     if (selectedOrders.includes(orderId)) {
       setSelectedOrders(selectedOrders.filter((id) => id !== orderId));
@@ -70,6 +70,50 @@ const TrackOrder = () => {
           />
           <FilterButton />
         </Paper>
+        <Box>
+          <div className="timeframe-buttons">
+            <button
+              className={`timeframe-button ${
+                selectedTimeframe === "All" ? "active" : ""
+              }`}
+              onClick={() => handleTimeframeChange("All")}
+            >
+              All
+            </button>
+            <button
+              className={`timeframe-button ${
+                selectedTimeframe === "7 Days" ? "active" : ""
+              }`}
+              onClick={() => handleTimeframeChange("7 Days")}
+            >
+              7 Days
+            </button>
+            <button
+              className={`timeframe-button ${
+                selectedTimeframe === "30 days" ? "active" : ""
+              }`}
+              onClick={() => handleTimeframeChange("30 days")}
+            >
+              30 days
+            </button>
+            <button
+              className={`timeframe-button ${
+                selectedTimeframe === "3 months" ? "active" : ""
+              }`}
+              onClick={() => handleTimeframeChange("3 months")}
+            >
+              3 months
+            </button>
+            <button
+              className={`timeframe-button ${
+                selectedTimeframe === "6 Months" ? "active" : ""
+              }`}
+              onClick={() => handleTimeframeChange("6 Months")}
+            >
+              6 Months
+            </button>
+          </div>
+        </Box>
         <Paper
           sx={{
             bgcolor: "white",
@@ -105,6 +149,11 @@ const TrackOrder = () => {
                       } else {
                         setSelectedOrders([]);
                       }
+                    }}
+                    sx={{
+                      "&.Mui-checked": {
+                        color: "#A0616A",
+                      },
                     }}
                   />
                 </TableCell>
@@ -150,6 +199,11 @@ const TrackOrder = () => {
                         } else {
                           setSelectedOrders([]);
                         }
+                      }}
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#A0616A",
+                        },
                       }}
                     />
                   </TableCell>

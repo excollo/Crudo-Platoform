@@ -57,7 +57,9 @@ const FilterButton = () => {
           <Checkbox
             checked={selected === "All Orders"}
             sx={{
-              color: selected === "All Orders" ? "#926B6B" : "#926B6B", // Set tick mark color to #926B6B when selected
+              "&.Mui-checked": {
+                color: "#A0616A",
+              },
             }}
           />
         </MenuItem>
@@ -77,7 +79,9 @@ const FilterButton = () => {
           <Checkbox
             checked={selected === "Pending Orders"}
             sx={{
-              color: selected === "Pending Orders" ? "#926B6B" : "#926B6B", // Set tick mark color to #926B6B when selected
+              "&.Mui-checked": {
+                color: "#A0616A",
+              },
             }}
           />
         </MenuItem>
@@ -97,7 +101,9 @@ const FilterButton = () => {
           <Checkbox
             checked={selected === "Out for Delivery"}
             sx={{
-              color: selected === "Out for Delivery" ? "#926B6B" : "#926B6B", // Set tick mark color to #926B6B when selected
+              "&.Mui-checked": {
+                color: "#A0616A",
+              },
             }}
           />
         </MenuItem>
@@ -117,7 +123,9 @@ const FilterButton = () => {
           <Checkbox
             checked={selected === "Shipped Orders"}
             sx={{
-              color: selected === "Shipped Orders" ? "#926B6B" : "#926B6B", // Set tick mark color to #926B6B when selected
+              "&.Mui-checked": {
+                color: "#A0616A",
+              },
             }}
           />
         </MenuItem>
@@ -137,7 +145,9 @@ const FilterButton = () => {
           <Checkbox
             checked={selected === "Cancelled Orders"}
             sx={{
-              color: selected === "Cancelled Orders" ? "#926B6B" : "#926B6B", // Set tick mark color to #926B6B when selected
+              "&.Mui-checked": {
+                color: "#A0616A",
+              },
             }}
           />
         </MenuItem>
