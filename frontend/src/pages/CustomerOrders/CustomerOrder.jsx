@@ -1,68 +1,68 @@
-import { Box,Avatar,TableBody,TableRow,TableCell } from '@mui/material'
-import Paper from '@mui/material/Paper'
-import Typography from '@mui/material/Typography'
-import OrderTable from '../CustomerOrders/OrderTable/OrderTable'
-import Pagination from '../CustomerOrders/Pagination/Pagination'
-import TopBar from './TopBar/TopBar'
-import FilterButton from './FilterButton/FilterButton'
-import DateFilterButton from './DateFilterButton/DateFilterButton'
-import { User } from 'lucide-react'
-import React,{useState,useEffect} from 'react'
+import { Box, Avatar } from "@mui/material"; // Import Material-UI components
+import Paper from "@mui/material/Paper"; // Import Material-UI Paper component
+import Typography from "@mui/material/Typography"; // Import Material-UI Typography for text display
+import OrderTable from "../CustomerOrders/OrderTable/OrderTable"; // Import OrderTable component
+import Pagination from "../CustomerOrders/Pagination/Pagination"; // Import Pagination component
+import TopBar from "./TopBar/TopBar"; // Import TopBar component
+import FilterButton from "./FilterButton/FilterButton"; // Import FilterButton component
+import DateFilterButton from "./DateFilterButton/DateFilterButton"; // Import DateFilterButton component
+import { User } from "lucide-react"; // Import User icon from lucide-react library
+import React, { useState, useEffect } from "react"; // Import React and hooks for state and lifecycle
 
+// CustomerOrder component to display customer orders with pagination and filtering
 const CustomerOrder = () => {
+  // State to hold orders, current page, and total pages
+  const [orders, setOrders] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-    const [orders,setOrders] = useState([])
-    const [page,setPage] = useState(1)
-    const [totalPages,setTotalPages] = useState(1);
+  // Fetch customer orders when the page changes
+  useEffect(() => {
+    fetchCustomerOrders(page); // Fetch orders for the current page
+  }, [page]);
 
-    useEffect(() => {
-        fetchCustomerOrders(page);
-    },[page])
-
-    const fetchCustomerOrders = async (pageNumber) => {
-        try{
-            const response = await fetch(
-              `http://localhost:3000/api/customerorders/10000166/orders?page=${pageNumber}`
-            );
-            const data = await response.json();
-            setOrders(data.orders);
-            setTotalPages(Math.ceil(data.totalOrders / 10));
-        }
-        catch(error){
-            console.log(error);
-        }
+  // Fetch orders from the server
+  const fetchCustomerOrders = async (pageNumber) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/customerorders/10000166/orders?page=${pageNumber}` // API endpoint with pagination
+      );
+      const data = await response.json();
+      setOrders(data.orders); // Set fetched orders
+      setTotalPages(Math.ceil(data.totalOrders / 10)); // Calculate total pages
+    } catch (error) {
+      console.log(error); // Log error in case of failure
     }
+  };
 
-    const handlePageChange = (pageNumber) => {
-        setPage(pageNumber);
-    }
+  // Handle page change event
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber); // Update the current page
+  };
 
   return (
     <Box
       p={15}
       sx={{
-        bgcolor: "#f5f5f5", // Background color
-        width: "100%",
-        paddingTop: "64px", // Padding from the top
-        height: "90%", // Set the height of the content
+        bgcolor: "#f5f5f5", // Light grey background
+        width: "100%", // Full width container
+        paddingTop: "64px", // Padding at the top
+        height: "90%", // Set height to occupy most of the viewport
       }}
     >
-      <TopBar />
+      <TopBar /> {/* Top navigation bar */}
       <Box p={8} mt={-9}>
+        {/* Customer details section */}
         <Paper sx={{ display: "flex", borderLeft: "4px solid #A0616A" }}>
-          <Box
-            sx={{
-              marginTop: "auto",
-              alignItems: "center",
-              padding: 2,
-            }}
-          >
+          {/* Customer avatar */}
+          <Box sx={{ marginTop: "auto", alignItems: "center", padding: 2 }}>
             <Avatar
               sx={{ bgcolor: "grey.300", marginRight: 1.5, cursor: "pointer" }}
             >
-              <User size={20} />
+              <User size={20} /> {/* User icon */}
             </Avatar>
           </Box>
+          {/* Customer information */}
           <Box
             sx={{
               marginTop: "10px",
@@ -76,6 +76,7 @@ const CustomerOrder = () => {
             <Typography sx={{ fontSize: "13px" }}>10000166</Typography>
             <Typography sx={{ fontSize: "13px" }}>#12453</Typography>
           </Box>
+          {/* Total orders and amount spent */}
           <Box
             sx={{
               marginTop: "20px",
@@ -92,11 +93,7 @@ const CustomerOrder = () => {
             </Typography>
           </Box>
           <Box
-            sx={{
-              marginTop: "20px",
-              marginBottom: "10px",
-              marginLeft: "80px",
-            }}
+            sx={{ marginTop: "20px", marginBottom: "10px", marginLeft: "80px" }}
           >
             <Typography sx={{ fontSize: "13px" }}>
               <b>Total Spent</b>
@@ -107,6 +104,8 @@ const CustomerOrder = () => {
             </Typography>
           </Box>
         </Paper>
+
+        {/* Filter and search bar */}
         <Paper
           sx={{
             bgcolor: "white",
@@ -132,20 +131,22 @@ const CustomerOrder = () => {
               borderRadius: "20px",
             }}
           />
-          <FilterButton />
-          <DateFilterButton />
+          <FilterButton /> {/* Filter button */}
+          <DateFilterButton /> {/* Date filter button */}
         </Paper>
-        <Paper sx={{marginTop: "2rem", paddingBottom: "2rem"}}>
-          <OrderTable orders={orders} />
+
+        {/* Orders table and pagination */}
+        <Paper sx={{ marginTop: "2rem", paddingBottom: "2rem" }}>
+          <OrderTable orders={orders} /> {/* Orders table */}
           <Pagination
             page={page}
             totalPages={totalPages}
-            onPageChange={handlePageChange}
+            onPageChange={handlePageChange} // Pagination controls
           />
         </Paper>
       </Box>
     </Box>
   );
-}
+};
 
-export default CustomerOrder
+export default CustomerOrder; // Export the CustomerOrder component

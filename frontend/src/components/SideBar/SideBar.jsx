@@ -21,8 +21,10 @@ import {
 import logo from "../../assets/images/logo.svg";
 
 const Sidebar = () => {
+  // State to track the currently selected menu item based on the current URL path
   const [selected, setSelected] = useState(window.location.pathname);
 
+  // Define the list of menu items with their icons, labels, and paths
   const menuItems = [
     { icon: <Home size={24} />, label: "Dashboard", path: "/dashboard" },
     { icon: <BarChart2 size={24} />, label: "Analytics", path: "/analytics" },
@@ -43,6 +45,7 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
+        // Sidebar styling: responsive width, full height, fixed position
         width: { xs: 80, sm: 120 },
         minHeight: "100vh",
         bgcolor: "background.paper",
@@ -56,6 +59,7 @@ const Sidebar = () => {
         left: 0,
       }}
     >
+      {/* Logo Section */}
       <Box sx={{ padding: 1, marginBottom: 2 }}>
         <img
           src={logo}
@@ -64,14 +68,16 @@ const Sidebar = () => {
         />
       </Box>
 
+      {/* Menu List */}
       <List sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1 }}>
         {menuItems.map((item, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton
               component="a"
-              href={item.path}
-              onClick={() => setSelected(item.path)}
+              href={item.path} // Link to the menu item's path
+              onClick={() => setSelected(item.path)} // Update selected state on click
               sx={{
+                // Styling for the button, including hover and active states
                 flexDirection: "column",
                 alignItems: "center",
                 textAlign: "center",
@@ -79,7 +85,7 @@ const Sidebar = () => {
                 borderRadius: 1,
                 transition: "all 0.2s ease-in-out",
                 bgcolor:
-                  selected === item.path ? "action.hover" : "transparent",
+                  selected === item.path ? "action.hover" : "transparent", // Highlight if selected
                 color: selected === item.path ? "#926B6B" : "text.secondary",
                 "&:hover": {
                   bgcolor: "action.hover",
@@ -87,6 +93,7 @@ const Sidebar = () => {
                 },
               }}
             >
+              {/* Icon Section */}
               <ListItemIcon
                 sx={{
                   minWidth: 0,
@@ -98,6 +105,7 @@ const Sidebar = () => {
               >
                 {item.icon}
               </ListItemIcon>
+              {/* Label Section */}
               <ListItemText
                 primary={item.label}
                 primaryTypographyProps={{
@@ -112,18 +120,23 @@ const Sidebar = () => {
           </ListItem>
         ))}
       </List>
+
+      {/* Divider to separate menu and footer */}
       <Divider />
 
+      {/* Footer Section with User Avatar */}
       <Box
         sx={{
-          marginTop: "auto",
+          marginTop: "auto", // Push to the bottom
           paddingTop: 2,
           display: "flex",
           alignItems: "center",
           marginLeft: 2.9,
         }}
       >
-        <Avatar sx={{ bgcolor: "grey.300", marginRight: 1.5,cursor: "pointer" }}>
+        <Avatar
+          sx={{ bgcolor: "grey.300", marginRight: 1.5, cursor: "pointer" }}
+        >
           <User size={20} />
         </Avatar>
       </Box>

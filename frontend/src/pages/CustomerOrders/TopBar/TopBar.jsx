@@ -5,9 +5,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 import { ChevronRightIcon } from "lucide-react";
-import { Button } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import { NotificationsOutlined as NotificationsIcon } from "@mui/icons-material";
 
 // TopBar component for rendering the navigation bar
 const TopBar = () => {
