@@ -16,7 +16,7 @@ const createOrder = async (req, res) => {
     await newOrder.save();
 
     const prodDtl = [];
-
+    // Prepare the product details for the SwilERP API
     for(const product of products){
       const {productId,quantity,price} = product;
       prodDtl.push({
@@ -29,7 +29,7 @@ const createOrder = async (req, res) => {
         Rate: price,
       });
     }
-
+    // Prepare the data to be sent to the SwilERP API
     const swilERPData = {
       ApplyPromotion: false,
       DraftMode: 0,
@@ -41,8 +41,7 @@ const createOrder = async (req, res) => {
       ProdDtl: prodDtl,
     };
 
-    console.log(swilERPData);
-
+    // Make a POST request to the SwilERP API to create a new sales order
     const response = await axios.post(
       "https://api-test.swilerp.com/erp/v1/api/transaction/salesorder/CreateSalesOrdMobile",
       swilERPData,
@@ -53,8 +52,6 @@ const createOrder = async (req, res) => {
         },
       }
     )
-
-    console.log("SwilERP Response:", response.data);
 
     // Send a success response with the created order details
     res.status(201).json({

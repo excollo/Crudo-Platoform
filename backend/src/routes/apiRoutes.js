@@ -16,6 +16,7 @@ router.get("/customers", getCustomers);
 // Define a route for GET requests to '/product' that invokes the getProducts function
 router.get("/product", getProducts);
 
+// Define a route for GET requests to '/customerorders/:customerId/orders' that invokes the getCustomerOrders function
 router.get("/customerorders/:customerId/orders",(req,res,next) => {
     next();
 }, getCustomerOrders);

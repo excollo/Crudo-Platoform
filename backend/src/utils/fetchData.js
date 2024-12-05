@@ -57,6 +57,7 @@ const fetchProduct = async (pageNo = 1, pageSize = -1, search = "") => {
   }
 };
 
+// Function to fetch order details by ID
 const fetchOrderDetails = async (id = 1714,FkID = 3) => {
   try{
     const response = await axios.post(`${TEST_BASE}api/transaction/salesorder/GetByIDMobile`,{}
@@ -73,6 +74,7 @@ const fetchOrderDetails = async (id = 1714,FkID = 3) => {
   }
 }
 
+// Function to fetch a customer's orders by customer ID
 const fetchCustomerOrders = async (customerId) => {
   try{
     const orders = await Order.find({'customer.customerId': customerId})
