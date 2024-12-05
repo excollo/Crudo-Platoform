@@ -3,15 +3,25 @@ const mongoose = require("mongoose");
 
 // Define a schema for the Customer model
 const customerSchema = new mongoose.Schema({
-  customerId: { type: Number, required: true },
   // Define the 'fullname' field, which is a required string
   fullname: { type: String, required: true },
+
+  swilId: { type: String, required: false, unique: true },
 
   // Define the 'email' field, which is a required string
   email: { type: String, required: true },
 
   // Define the 'phoneNumber' field, which is a required string
   phoneNumber: { type: String, required: true },
+
+  // Define the 'alias' field, which is a required string
+  alias: { type: String, required: true },
+
+  // Define the 'pincode' field, which is a required number
+  pincode: { type: Number, required: true },
+
+  // Define the 'station' field, which is a required string
+  station: { type: String, required: true },
 
   // Define the 'age' field, which is a required number
   age: { type: Number, required: true },

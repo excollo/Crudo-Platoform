@@ -5,13 +5,17 @@ const express = require("express");
 const router = express.Router();
 
 // Import the getCustomers function from the customer controller
-const { getCustomers,getCustomerOrders } = require("../controllers/customerController");
+const { getCustomers,getCustomerOrders,createCustomer,updateCustomer } = require("../controllers/customerController");
 
 // Import the getProducts function from the product controller
 const { getProducts } = require("../controllers/productController");
 
 // Define a route for GET requests to '/customers' that invokes the getCustomers function
 router.get("/customers", getCustomers);
+
+router.post("/create-customer", createCustomer);
+
+router.put("/update-customer", updateCustomer);
 
 // Define a route for GET requests to '/product' that invokes the getProducts function
 router.get("/product", getProducts);

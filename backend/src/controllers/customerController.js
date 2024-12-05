@@ -1,5 +1,7 @@
 // Import the fetchCustomer and fetchCustomerOrders functions from the fetchData utility module
 const { fetchCustomer, fetchCustomerOrders } = require("../utils/fetchData");
+const axios = require("axios");
+const Customer = require("../models/customerModel");
 
 // Define an asynchronous function to handle the GET request for customers
 const getCustomers = async (req, res) => {
@@ -18,6 +20,157 @@ const getCustomers = async (req, res) => {
     res.status(500).json({
       message: "Error fetching customers", // User-friendly error message
       error: error.message, // Detailed error message
+    });
+  }
+};
+
+const createCustomer = async (req, res) => {
+  try {
+    const {
+      fullname,
+      email,
+      phoneNumber,
+      alias,
+      pincode,
+      station,
+      age,
+      sex,
+      address,
+    } = req.body;
+
+    const swilERPCustomerData = {
+      Address: address,
+      Customer: fullname,
+      Email: email,
+      Mobile: phoneNumber,
+      Alias: alias,
+      Pincode: pincode,
+      Station: station,
+    };
+
+    const response = await axios.post(
+      "https://api-test.swilerp.com/erp/v1/api/master/customer/CreateCustomerMobile",
+      swilERPCustomerData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.SWIL_API_KEY}`,
+        },
+      }
+    );
+
+    console.log(
+      "Swil ERP Response:",
+      JSON.stringify(response.data, null, 2)
+    );
+
+
+    const swilId = response.data.PKID || response.data.Id || response.data.ID || response.data.id;
+
+    if (!swilId) {
+      throw new Error("Failed to receive Swil Customer ID");
+    }
+
+    const newCustomer = new Customer({
+      fullname,
+      email,
+      phoneNumber,
+      alias,
+      pincode,
+      station,
+      age,
+      sex,
+      address,
+      swilId,
+    });
+
+    await newCustomer.save();
+
+    res.status(201).json({
+      message: "Customer created successfully",
+      customer: newCustomer,
+      swilERPCustomerData: response.data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error creating customer",
+      error: error.message,
+    });
+  }
+};
+
+const updateCustomer = async (req, res) => {
+  try {
+    const {
+      fullname,
+      email,
+      phoneNumber,
+      alias,
+      pincode,
+      station,
+      age,
+      sex,
+      address,
+      swilId,
+    } = req.body;
+
+    const swilERPUpdateCustomerData = {
+      PKID: swilId,
+      Address: address,
+      Customer: fullname,
+      Email: email,
+      Mobile: phoneNumber,
+      Alias: alias,
+      Pincode: pincode,
+      Station: station,
+    };
+
+    const response = await axios.post(
+      "https://api-test.swilerp.com/erp/v1/api/master/customer/UpdateMobile",
+      swilERPUpdateCustomerData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.SWIL_API_KEY}`,
+        },
+      }
+    );
+
+    // Remove save() method and add error handling for no document found
+    const updatedCustomer = await Customer.findOneAndUpdate(
+      { swilId: swilId },
+      {
+        fullname,
+        email,
+        phoneNumber,
+        alias,
+        pincode,
+        station,
+        age,
+        sex,
+        address,
+      },
+      { new: true, runValidators: true } // Added runValidators to ensure data validation
+    );
+
+    // Check if customer was found and updated
+    if (!updatedCustomer) {
+      return res.status(404).json({
+        message: "Customer not found",
+      });
+    }
+
+    console.log(swilERPUpdateCustomerData);
+
+    res.status(201).json({
+      message: "Customer updated successfully",
+      customer: updatedCustomer,
+      swilERPUpdateCustomerData: response.data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error updating customer",
+      error: error.message,
     });
   }
 };
@@ -58,4 +211,6 @@ const getCustomerOrders = async (req, res) => {
 module.exports = {
   getCustomers,
   getCustomerOrders,
+  createCustomer,
+  updateCustomer,
 };
