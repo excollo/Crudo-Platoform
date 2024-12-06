@@ -39,6 +39,7 @@ const createCustomer = async (req, res) => {
       alias,
       pincode,
       station,
+      abhanumber,
       age,
       sex,
       address,
@@ -52,7 +53,7 @@ const createCustomer = async (req, res) => {
       Mobile: phoneNumber,
       Alias: alias,
       Pincode: pincode,
-      Station: station,
+      Station: station.trim().toUpperCase(),
     };
 
     // Send a POST request to the Swil ERP API to create a new customer
@@ -92,11 +93,18 @@ const createCustomer = async (req, res) => {
       age,
       sex,
       address,
+      abhanumber,
       swilId,
     });
 
     // Save the new customer to the database
-    await newCustomer.save();
+    try {
+      await newCustomer.save();
+    } catch (dbError) {
+      console.error("Database save error:", dbError);
+      throw new Error("Failed to save customer to the database.");
+    }
+
 
     // Respond with the created customer and Swil ERP data
     res.status(201).json({
@@ -141,6 +149,8 @@ const updateCustomer = async (req, res) => {
       Pincode: pincode,
       Station: station,
     };
+
+    console.log(swilERPUpdateCustomerData);
 
     // Send a POST request to update customer data in the Swil ERP API
     const response = await axios.post(

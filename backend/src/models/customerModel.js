@@ -15,7 +15,10 @@ const customerSchema = new mongoose.Schema({
   phoneNumber: { type: String, required: true },
 
   // Define the 'alias' field, which is a required string
-  alias: { type: String, required: true },
+  alias: { type: String, required: true, unique: true },
+
+  // Define the 'abhanumber' field, which is an optional number
+  abhanumber: { type: Number, required: false },
 
   // Define the 'pincode' field, which is a required number
   pincode: { type: Number, required: true },
