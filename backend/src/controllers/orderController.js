@@ -71,18 +71,26 @@ const createOrder = async (req, res) => {
   }
 };
 
-const orderDetails = async (req,res) => {
-  const {id,FkID} = req.query;
+// Define an asynchronous function to fetch order details
+const orderDetails = async (req, res) => {
+  // Extract the `id` and `FkID` from the request query parameters
+  const { id, FkID } = req.query;
+
   try {
-    const orderDetail = await fetchOrderDetails(id,FkID);
+    // Fetch order details using the `fetchOrderDetails` function, passing the `id` and `FkID`
+    const orderDetail = await fetchOrderDetails(id, FkID);
+
+    // Respond with the fetched order details as a JSON object
     res.json(orderDetail);
   } catch (error) {
+    // Handle any errors that occur during order detail fetching
     res.status(500).json({
-      message: "Error fetching order details",
-      error: error.message,
+      message: "Error fetching order details", // User-friendly error message
+      error: error.message, // Detailed error message
     });
   }
-}
+};
+
 
 // Export the createOrder function to be used in route handlers
 module.exports = {

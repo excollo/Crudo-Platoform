@@ -1,31 +1,37 @@
 // Import the fetchCustomer and fetchCustomerOrders functions from the fetchData utility module
 const { fetchCustomer, fetchCustomerOrders } = require("../utils/fetchData");
+
+// Import the axios library for making HTTP requests
 const axios = require("axios");
+
+// Import the Customer model to interact with the customer collection in the database
 const Customer = require("../models/customerModel");
 
-// Define an asynchronous function to handle the GET request for customers
+// Define an asynchronous function to handle the GET request for retrieving customers
 const getCustomers = async (req, res) => {
   // Extract page number, page size, and search query from the request query parameters
   // Default values: pageNo = 1, pageSize = -1 (no limit), search = empty string
   const { pageNo = 1, pageSize = -1, search = "" } = req.query;
 
   try {
-    // Call fetchCustomer to retrieve customers based on the provided filters
+    // Fetch customers based on the provided filters (pagination and search)
     const customers = await fetchCustomer(pageNo, pageSize, search);
 
-    // Respond with the fetched customers as a JSON object
+    // Send the fetched customers as a JSON response
     res.json(customers);
   } catch (error) {
-    // Handle any errors that occur during customer fetching
+    // Handle any errors during the customer fetching process
     res.status(500).json({
       message: "Error fetching customers", // User-friendly error message
-      error: error.message, // Detailed error message
+      error: error.message, // Detailed error information
     });
   }
 };
 
+// Define an asynchronous function to handle the creation of a new customer
 const createCustomer = async (req, res) => {
   try {
+    // Extract customer details from the request body
     const {
       fullname,
       email,
@@ -38,6 +44,7 @@ const createCustomer = async (req, res) => {
       address,
     } = req.body;
 
+    // Construct the customer data object to send to the Swil ERP API
     const swilERPCustomerData = {
       Address: address,
       Customer: fullname,
@@ -48,6 +55,7 @@ const createCustomer = async (req, res) => {
       Station: station,
     };
 
+    // Send a POST request to the Swil ERP API to create a new customer
     const response = await axios.post(
       "https://api-test.swilerp.com/erp/v1/api/master/customer/CreateCustomerMobile",
       swilERPCustomerData,
@@ -59,18 +67,21 @@ const createCustomer = async (req, res) => {
       }
     );
 
-    console.log(
-      "Swil ERP Response:",
-      JSON.stringify(response.data, null, 2)
-    );
+    console.log("Swil ERP Response:", JSON.stringify(response.data, null, 2));
 
+    // Extract the Swil Customer ID from the API response
+    const swilId =
+      response.data.PKID ||
+      response.data.Id ||
+      response.data.ID ||
+      response.data.id;
 
-    const swilId = response.data.PKID || response.data.Id || response.data.ID || response.data.id;
-
+    // Throw an error if the Swil Customer ID is not received
     if (!swilId) {
       throw new Error("Failed to receive Swil Customer ID");
     }
 
+    // Create a new customer record in the database
     const newCustomer = new Customer({
       fullname,
       email,
@@ -84,14 +95,17 @@ const createCustomer = async (req, res) => {
       swilId,
     });
 
+    // Save the new customer to the database
     await newCustomer.save();
 
+    // Respond with the created customer and Swil ERP data
     res.status(201).json({
       message: "Customer created successfully",
       customer: newCustomer,
       swilERPCustomerData: response.data,
     });
   } catch (error) {
+    // Handle any errors during customer creation
     res.status(500).json({
       message: "Error creating customer",
       error: error.message,
@@ -99,8 +113,10 @@ const createCustomer = async (req, res) => {
   }
 };
 
+// Define an asynchronous function to handle customer updates
 const updateCustomer = async (req, res) => {
   try {
+    // Extract updated customer details from the request body
     const {
       fullname,
       email,
@@ -114,6 +130,7 @@ const updateCustomer = async (req, res) => {
       swilId,
     } = req.body;
 
+    // Construct the customer data object for the Swil ERP API update request
     const swilERPUpdateCustomerData = {
       PKID: swilId,
       Address: address,
@@ -125,6 +142,7 @@ const updateCustomer = async (req, res) => {
       Station: station,
     };
 
+    // Send a POST request to update customer data in the Swil ERP API
     const response = await axios.post(
       "https://api-test.swilerp.com/erp/v1/api/master/customer/UpdateMobile",
       swilERPUpdateCustomerData,
@@ -136,7 +154,7 @@ const updateCustomer = async (req, res) => {
       }
     );
 
-    // Remove save() method and add error handling for no document found
+    // Update the customer record in the database
     const updatedCustomer = await Customer.findOneAndUpdate(
       { swilId: swilId },
       {
@@ -150,10 +168,10 @@ const updateCustomer = async (req, res) => {
         sex,
         address,
       },
-      { new: true, runValidators: true } // Added runValidators to ensure data validation
+      { new: true, runValidators: true } // Ensure updated data is validated
     );
 
-    // Check if customer was found and updated
+    // Return 404 if no customer is found for the given Swil ID
     if (!updatedCustomer) {
       return res.status(404).json({
         message: "Customer not found",
@@ -162,12 +180,14 @@ const updateCustomer = async (req, res) => {
 
     console.log(swilERPUpdateCustomerData);
 
+    // Respond with the updated customer and Swil ERP data
     res.status(201).json({
       message: "Customer updated successfully",
       customer: updatedCustomer,
       swilERPUpdateCustomerData: response.data,
     });
   } catch (error) {
+    // Handle any errors during customer update
     res.status(500).json({
       message: "Error updating customer",
       error: error.message,
@@ -175,39 +195,38 @@ const updateCustomer = async (req, res) => {
   }
 };
 
-// Define an asynchronous function to handle the GET request for a customer's orders
+// Define an asynchronous function to handle fetching orders for a specific customer
 const getCustomerOrders = async (req, res) => {
   // Extract the customerId from the request parameters
   const customerId = req.params.customerId;
 
   try {
-    // Check if the customerId is provided
+    // Validate that the customerId is provided
     if (!customerId) {
-      // Respond with a 400 status and error message if customerId is missing
       return res.status(400).json({
         message: "Customer ID is required",
       });
     }
 
-    // Fetch the customer's orders using the fetchCustomerOrders function
+    // Fetch customer orders using the fetchCustomerOrders function
     const customerOrders = await fetchCustomerOrders(customerId);
 
-    // Respond with the fetched orders as a JSON object
+    // Respond with the fetched orders
     res.json({
-      message: "Customer orders fetched successfully", // Success message
-      ordersCount: customerOrders.length, // Total number of orders
-      orders: customerOrders, // List of orders
+      message: "Customer orders fetched successfully",
+      ordersCount: customerOrders.length, // Include the total number of orders
+      orders: customerOrders, // Include the list of orders
     });
   } catch (error) {
-    // Handle any errors that occur during order fetching
+    // Handle any errors during order fetching
     res.status(500).json({
-      message: "Error fetching customer orders", // User-friendly error message
-      error: error.message, // Detailed error message
+      message: "Error fetching customer orders",
+      error: error.message,
     });
   }
 };
 
-// Export the getCustomers and getCustomerOrders functions to make them available to other modules
+// Export the functions to make them available to other modules
 module.exports = {
   getCustomers,
   getCustomerOrders,

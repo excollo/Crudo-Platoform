@@ -13,8 +13,10 @@ const { getProducts } = require("../controllers/productController");
 // Define a route for GET requests to '/customers' that invokes the getCustomers function
 router.get("/customers", getCustomers);
 
+// Define a route for POST requests to '/create-customer' that invokes the createCustomer function
 router.post("/create-customer", createCustomer);
 
+// Define a route for PUT requests to '/update-customer' that invokes the updateCustomer function
 router.put("/update-customer", updateCustomer);
 
 // Define a route for GET requests to '/product' that invokes the getProducts function
