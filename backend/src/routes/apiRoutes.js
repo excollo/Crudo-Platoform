@@ -5,7 +5,7 @@ const express = require("express");
 const router = express.Router();
 
 // Import the getCustomers function from the customer controller
-const { getCustomers,getCustomerOrders,createCustomer,updateCustomer } = require("../controllers/customerController");
+const { getCustomers,getCustomerOrders,createCustomer,updateCustomer,syncCustomer } = require("../controllers/customerController");
 
 // Import the getProducts function from the product controller
 const { getProducts } = require("../controllers/productController");
@@ -26,6 +26,8 @@ router.get("/product", getProducts);
 router.get("/customerorders/:customerId/orders",(req,res,next) => {
     next();
 }, getCustomerOrders);
+
+router.get('/sync-customer',syncCustomer);
 
 // Export the router to make it available for use in other modules
 module.exports = router;

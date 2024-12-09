@@ -1,13 +1,77 @@
-// Import the fetchCustomer and fetchCustomerOrders functions from the fetchData utility module
+// Import required modules
 const { fetchCustomer, fetchCustomerOrders } = require("../utils/fetchData");
-
-// Import the axios library for making HTTP requests
 const axios = require("axios");
-
-// Import the Customer model to interact with the customer collection in the database
 const Customer = require("../models/customerModel");
 
-// Define an asynchronous function to handle the GET request for retrieving customers
+// Function to sync customer data with Swil ERP
+
+const syncCustomerDataFromSwilERP = async () => {
+  try {
+    let pageNo = 1;
+    let pageSize = 100;
+    let hasMoreCustomers = true;
+
+    while (hasMoreCustomers) {
+      const swilCustomers = await fetchCustomer(pageNo, pageSize);
+
+      if (!swilCustomers || swilCustomers.length === 0) {
+        hasMoreCustomers = false;
+        break;
+      }
+
+      for (const swilCustomer of swilCustomers) {
+        const existingCustomer = await Customer.findOne({
+          swilId: swilCustomer.PKID,
+        });
+
+        const customerData = {
+          swilId: swilCustomer.PKID,
+          fullname: swilCustomer.Party,
+          email:
+            swilCustomer.Email ||
+            `${swilCustomer.Party.replace(
+              /\s+/g,
+              ""
+            ).toLowerCase()}@example.com`,
+          phoneNumber: swilCustomer.Mobile || "0000000000",
+          alias: swilCustomer.Alias || generateAlias(swilCustomer.Party),
+          pincode: swilCustomer.Pincode
+            ? parseInt(swilCustomer.Pincode)
+            : 0,
+          station: swilCustomer.Station || "UNKNOWN",
+          address: swilCustomer.Address || "NO ADDRESS",
+          status: swilCustomer.Status === "Active" ? "Active" : "Inactive",
+          age: swilCustomer.Age || 0,
+          sex: swilCustomer.Sex || "Other",
+          remarks: swilCustomer.Remarks || "NO REMARKS",
+        };
+
+        if (!existingCustomer) {
+          const newCustomer = new Customer(customerData);
+          await newCustomer.save();
+          console.log(`Customer created: ${newCustomer.fullname}`);
+        } else {
+          Object.assign(existingCustomer, customerData);
+          await existingCustomer.save();
+          console.log(`Customer updated: ${existingCustomer.fullname}`);
+        }
+      }
+      pageNo++;
+    }
+    console.log("Customer sync completed");
+    return true;
+  } catch (error) {
+    console.error("Error syncing customer data:", error);
+    throw error;
+  }
+};
+
+const generateAlias = (fullname) => {
+  const sanitizedName = fullname.replace(/\s+/g, "").toLowerCase();
+  const randomSuffix = Math.random().toString(36).substring(2, 7);
+  return `${sanitizedName}_${randomSuffix}`;
+};
+
 const getCustomers = async (req, res) => {
   // Extract page number, page size, and search query from the request query parameters
   // Default values: pageNo = 1, pageSize = -1 (no limit), search = empty string
@@ -104,7 +168,6 @@ const createCustomer = async (req, res) => {
       console.error("Database save error:", dbError);
       throw new Error("Failed to save customer to the database.");
     }
-
 
     // Respond with the created customer and Swil ERP data
     res.status(201).json({
@@ -236,10 +299,28 @@ const getCustomerOrders = async (req, res) => {
   }
 };
 
+const syncCustomer = async (req,res) => {
+  try{
+    const syncResult = await syncCustomerDataFromSwilERP();
+    res.status(200).json({
+      message: "Customer data sync successful",
+      timeStamp: new Date().toISOString(),
+      result: syncResult,
+    })
+  }
+  catch(error){
+    res.status(500).json({
+      message: "Error syncing customer data",
+      error: error.message,
+    });
+  }
+}
+
 // Export the functions to make them available to other modules
 module.exports = {
   getCustomers,
   getCustomerOrders,
   createCustomer,
   updateCustomer,
+  syncCustomer,
 };
