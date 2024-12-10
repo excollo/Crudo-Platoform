@@ -87,10 +87,82 @@ const fetchCustomerOrders = async (customerId) => {
   }
 }
 
+const fetchOrderFulfillment = async (
+  ToDate = "12/9/2024",
+  FromDate = "12/9/2024",
+  TranFilter = "",
+  EmployeeFilter = "",
+  FKReferByID = 0,
+  OrderByExp = false
+) => {
+  try {
+    const response = await axios.post(
+      `${TEST_BASE}api/Transaction/Salesorder/GetTrnList`,
+      {},
+      {
+        headers,
+        params: {
+          ToDate,
+          FromDate,
+          TranFilter,
+          EmployeeFilter,
+          FKReferByID,
+          OrderByExp,
+        },
+      }
+    );
+
+    console.log(response.data?.Data?.Table);
+
+    // Extract and return the Table array
+    return response.data?.Data?.Table || [];
+  } catch (error) {
+    console.error("Error fetching order fulfillment", error);
+    return [];
+  }
+};
+
+const fetchAllStatusList = async (pageNo = 1, pageSize = -1, search = "") => {
+  try {
+    const response = await axios.post(
+      `${TEST_BASE}api/master/Status/list`,
+      {},
+      {
+        headers,
+        params: { pageNo, pageSize, search },
+      }
+    );
+    return response.data?.Data?.Table || [];
+  } catch (error) {
+    console.error("Error fetching order status list", error);
+    return [];
+  }
+}
+
+const fetchTrackOrder = async (PKID = 5, SeriesID = 10000096) => {
+  try {
+    const response = await axios.post(
+      `${TEST_BASE}api/report/OrderFullfillment/GetTranStatusData`,
+      {},
+      {
+        headers,
+        params: { PKID, SeriesID },
+      }
+    );
+    return response.data || [];
+  } catch (error) {
+    console.error("Error fetching track order", error);
+    return [];
+  }
+}
+
 // Export the fetchCustomer and fetchProduct functions to make them accessible in other modules
 module.exports = {
   fetchCustomer,
   fetchProduct,
   fetchOrderDetails,
-  fetchCustomerOrders
+  fetchCustomerOrders,
+  fetchOrderFulfillment,
+  fetchAllStatusList,
+  fetchTrackOrder,
 };
